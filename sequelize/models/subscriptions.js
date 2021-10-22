@@ -1,6 +1,7 @@
-import { Model } from "sequelize";
-export default (sequelize, DataTypes) => {
-  class Plans extends Model {
+"use strict";
+const { Model } = require("sequelize");
+module.exports = (sequelize, DataTypes) => {
+  class Subscriptions extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -10,24 +11,21 @@ export default (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Plans.init(
+  Subscriptions.init(
     {
-      preapprovalPlanId: DataTypes.TEXT,
-      collectorId: DataTypes.BIGINT,
-      applicationId: DataTypes.BIGINT,
       reason: DataTypes.TEXT,
-      status: DataTypes.TEXT,
-      initPoint: DataTypes.TEXT,
       frequency: DataTypes.INTEGER,
       frequencyType: DataTypes.TEXT,
       transactionAmount: DataTypes.DOUBLE,
-      currencyId: DataTypes.TEXT,
       type: DataTypes.TEXT,
+      status: DataTypes.BOOLEAN,
+      planId: DataTypes.UUID,
+      userId: DataTypes.UUID,
     },
     {
       sequelize,
-      modelName: "plans",
+      modelName: "subscriptions",
     }
   );
-  return Plans;
+  return Subscriptions;
 };

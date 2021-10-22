@@ -1,9 +1,8 @@
-import pg from 'pg';
-import dotenv from "dotenv";
-const envPath = process.env.NODE_ENV || "development";
-dotenv.config({ path: `.env.${envPath}` });
+const pg = require('pg');
+const envPath = process.env.NODE_ENV || 'development';
+require('dotenv').config({ path: `.env.${envPath}` });
 
-const database = {
+module.exports = {
   development: {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
@@ -32,5 +31,3 @@ const database = {
     dialectModule: pg
   },
 };
-
-export default database;

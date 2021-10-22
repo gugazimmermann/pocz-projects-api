@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "offline:dev": "sls offline --stage development",
+    "deploy:dev": "sls deploy --stage development",
+    "remove:dev": "sls remove --stage development",
+    "offline:prod": "sls offline --stage production",
+    "deploy:prod": "sls deploy --stage production",
+    "remove:prod": "sls remove --stage production",
+    "test": "npm --prefix ./../../ test test-api"
   },
   "author": "",
   "license": "ISC"
