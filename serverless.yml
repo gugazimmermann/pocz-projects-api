@@ -86,3 +86,19 @@ functions:
     layers:
       - { Ref: PgLambdaLayer }
       - { Ref: DotenvPgSequelizeLambdaLayer }
+
+resources:
+  - Outputs:
+      ApiGatewayRestApiId:
+        Value:
+          Ref: ApiGatewayRestApi
+        Export:
+          Name: ${self:provider.stage}-ApiGatewayRestApiId
+    
+      ApiGatewayRestApiRootResourceId:
+        Value:
+           Fn::GetAtt:
+            - ApiGatewayRestApi
+            - RootResourceId 
+        Export:
+          Name: ${self:provider.stage}-ApiGatewayRestApiRootResourceId
