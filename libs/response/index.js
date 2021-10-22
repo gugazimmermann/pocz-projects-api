@@ -1,4 +1,4 @@
-function createResponse(statusCode, message) {
+function CreateResponse(statusCode, message) {
   return {
     statusCode: statusCode,
     headers: {
@@ -8,4 +8,4 @@ function createResponse(statusCode, message) {
   };
 }
 
-export default createResponse;
+export default CreateResponse;

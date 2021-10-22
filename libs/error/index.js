@@ -1,7 +1,7 @@
-function createError(statusCode, message) {
+function CreateError(statusCode, message) {
   const error = new Error(message);
   error.statusCode = statusCode;
   return error;
 }
 
-export default createError;
+export default CreateError;
