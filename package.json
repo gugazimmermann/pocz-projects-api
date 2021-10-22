@@ -1,0 +1,32 @@
+{
+  "name": "api",
+  "version": "0.1.0",
+  "private": true,
+  "main": "handler.js",
+  "scripts": {
+    "start:db": "docker-compose --env-file ./.env.development up -d",
+    "stop:db": "docker-compose down",
+    "destroy:db": "docker volume prune",
+    "offline:dev": "sls offline --stage development",
+    "deploy:dev": "sls deploy --stage development",
+    "remove:dev": "sls remove --stage development",
+    "offline:prod": "sls offline --stage production",
+    "deploy:prod": "sls deploy --stage production",
+    "remove:prod": "sls remove --stage production",
+    "test": "serverless-bundle test"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.7.0"
+  },
+  "devDependencies": {
+    "sequelize-cli": "^6.2.0",
+    "serverless-bundle": "4.3.1",
+    "serverless-domain-manager": "^5.1.5",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-offline": "^5.3.3",
+    "serverless-sequelize-migrations": "^1.1.1"
+  }
+}

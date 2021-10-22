@@ -1,0 +1,88 @@
+org: gugazimmermann
+app: pocz-api
+service: api
+
+frameworkVersion: "2"
+
+useDotenv: true
+variablesResolutionMode: 20210326
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+  - serverless-domain-manager
+  - serverless-sequelize-migrations
+
+custom:
+  bundle:
+    ignorePackages:
+      - pg-native
+  variables:
+    POSTGRES_SG: ${env:POSTGRES_SG, 'sg-111'}
+    POSTGRES_SN_1: ${env:POSTGRES_SN_1, 'subnet-111'}
+    POSTGRES_SN_2: ${env:POSTGRES_SN_2, 'subnet-222'}
+    POSTGRES_SN_3: ${env:POSTGRES_SN_3, 'subnet-333'}
+    POSTGRES_SN_4: ${env:POSTGRES_SN_4, 'subnet-444'}
+    POSTGRES_SN_5: ${env:POSTGRES_SN_5, 'subnet-555'}
+    POSTGRES_SN_6: ${env:POSTGRES_SN_6, 'subnet-666'}
+  customDomain:
+    domainName: ${env:PROJECT_API_DOMAIN, 'localhost'}
+    basePath: ""
+    stage: ${self:provider.stage}
+    createRoute53Record: true
+    endpointType: "regional"
+    securityPolicy: tls_1_2
+  lambdaPolicyXRay:
+    Effect: Allow
+    Action:
+      - xray:PutTraceSegments
+      - xray:PutTelemetryRecords
+    Resource: "*"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, "development"}
+  lambdaHashingVersion: 20201221
+  vpc:
+    securityGroupIds:
+      - ${env:POSTGRES_SG, self:custom.variables.POSTGRES_SG}
+    subnetIds:
+      - ${env:POSTGRES_SN_1, self:custom.variables.POSTGRES_SN_1}
+      - ${env:POSTGRES_SN_2, self:custom.variables.POSTGRES_SN_2}
+      - ${env:POSTGRES_SN_3, self:custom.variables.POSTGRES_SN_3}
+      - ${env:POSTGRES_SN_4, self:custom.variables.POSTGRES_SN_4}
+      - ${env:POSTGRES_SN_5, self:custom.variables.POSTGRES_SN_5}
+      - ${env:POSTGRES_SN_6, self:custom.variables.POSTGRES_SN_6}
+  region: us-east-1
+  environment:
+    NODE_ENV: ${self:provider.stage}
+  tracing:
+    lambda: true
+  iamRoleStatements:
+    - ${self:custom.lambdaPolicyXRay}
+    
+layers:
+  pg:
+    path: layers/postgre
+    description: "PostgreSQL Dependencies"
+  dotenvPgSequelize:
+    package:
+      artifact: layers/dotenv_pg_sequelize/DotenvPgSequelize.zip
+    description: "dotenv 10.0.0 pg 8.7.1 pg-hstore 2.3.4 sequelize 6.7.0"
+
+functions:
+  healthCheck:
+    handler: services/test-db/handler.healthCheck
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
