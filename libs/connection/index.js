@@ -1,7 +1,39 @@
 import { Sequelize } from "sequelize";
+import pg from "pg";
 import PlansModel from "../../sequelize/models/plans";
-import database from "../../sequelize/config/database";
+
 const env = process.env.NODE_ENV || "development";
+
+const database = {
+  development: {
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    host: process.env.POSTGRES_HOST,
+    port: 5432,
+    dialect: "postgres",
+    dialectModule: pg
+  },
+  test: {
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: `${process.env.POSTGRES_DB}_test`,
+    host: process.env.POSTGRES_HOST,
+    port: 5432,
+    dialect: "postgres",
+    dialectModule: pg
+  },
+  production: {
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    database: process.env.POSTGRES_DB,
+    host: process.env.POSTGRES_HOST,
+    port: 5432,
+    dialect: "postgres",
+    dialectModule: pg
+  },
+};
+
 const config = database[env];
 
 const sequelize = new Sequelize(
