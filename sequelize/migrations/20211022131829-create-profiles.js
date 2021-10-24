@@ -25,10 +25,17 @@ module.exports = {
         neighborhood: { type: DataTypes.TEXT, allowNull: true },
         city: { type: DataTypes.TEXT, allowNull: true },
         state: { type: DataTypes.TEXT, allowNull: true },
-        userId: { type: DataTypes.UUID, allowNull: false },
-        createdAt: { type: Sequelize.DATE, allowNull: false },
-        updatedAt: { type: Sequelize.DATE, allowNull: false },
-        deletedAt: { type: Sequelize.DATE, allowNull: true },
+        userId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'users',
+            key: 'id'
+          },
+          allowNull: false
+        },
+        createdAt: { type: DataTypes.DATE, allowNull: false },
+        updatedAt: { type: DataTypes.DATE, allowNull: false },
+        deletedAt: { type: DataTypes.DATE, allowNull: true },
       },
       {
         paranoid: true,

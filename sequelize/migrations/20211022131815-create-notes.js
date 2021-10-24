@@ -15,8 +15,8 @@ module.exports = {
       title: { type: DataTypes.TEXT, allowNull: false },
       content: { type: DataTypes.TEXT, allowNull: false },
       ownerId: { type: DataTypes.UUID, allowNull: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
+      createdAt: { type: DataTypes.DATE, allowNull: false },
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     });
   },
   down: async (queryInterface, Sequelize) => {

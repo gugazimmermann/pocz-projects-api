@@ -23,9 +23,9 @@ module.exports = {
         userId: { type: DataTypes.UUID, allowNull: true },
         placeId: { type: DataTypes.UUID, allowNull: true },
         tenantId: { type: DataTypes.UUID, allowNull: true },
-        createdAt: { type: Sequelize.DATE, allowNull: false },
-        updatedAt: { type: Sequelize.DATE, allowNull: false },
-        deletedAt: { type: Sequelize.DATE, allowNull: true },
+        createdAt: { type: DataTypes.DATE, allowNull: false },
+        updatedAt: { type: DataTypes.DATE, allowNull: false },
+        deletedAt: { type: DataTypes.DATE, allowNull: true },
       },
       {
         paranoid: true,

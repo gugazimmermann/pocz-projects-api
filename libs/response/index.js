@@ -1,10 +1,10 @@
-function CreateResponse(statusCode, message) {
+function CreateResponse(statusCode, body) {
   return {
     statusCode: statusCode,
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify(message),
+    body: JSON.stringify(body),
   };
 }
 

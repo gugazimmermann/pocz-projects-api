@@ -14,9 +14,16 @@ module.exports = {
       },
       token: { type: DataTypes.UUID, allowNull: false },
       expiryDate: { type: DataTypes.DATE, allowNull: false },
-      userId: { type: DataTypes.UUID, allowNull: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
+      userId: { 
+        type: DataTypes.UUID, 
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+        allowNull: false
+      },
+      createdAt: { type: DataTypes.DATE, allowNull: false },
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     });
   },
   down: async (queryInterface, Sequelize) => {

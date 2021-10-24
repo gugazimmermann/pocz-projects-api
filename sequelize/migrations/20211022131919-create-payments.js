@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      "credit_cards",
+      "payments",
       {
         id: {
           type: DataTypes.UUID,
@@ -14,12 +14,25 @@ module.exports = {
           unique: true,
           primaryKey: true,
         },
-        name: { type: DataTypes.TEXT, allowNull: false },
-        firstSixDigits: { type: DataTypes.TEXT, allowNull: false },
-        lastFourDigits: { type: DataTypes.TEXT, allowNull: false },
-        expirationMonth: { type: DataTypes.TEXT, allowNull: false },
-        expirationYear: { type: DataTypes.TEXT, allowNull: false },
-        status: { type: DataTypes.BOOLEAN, allowNull: false },
+        transactionAmount: { type: DataTypes.DOUBLE, allowNull: false },
+        status: { type: DataTypes.TEXT, allowNull: false },
+        paidDate: { type: DataTypes.DATE, allowNull: false },
+        subscriptionId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'subscriptions',
+            key: 'id'
+          },
+          allowNull: false
+        },
+        creditCardId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'credit_cards',
+            key: 'id'
+          },
+          allowNull: false
+        },
         userId: { 
           type: DataTypes.UUID, 
           references: {
@@ -39,6 +52,6 @@ module.exports = {
     );
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("credit_cards");
+    await queryInterface.dropTable("payments");
   },
 };

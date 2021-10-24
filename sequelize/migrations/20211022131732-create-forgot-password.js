@@ -16,8 +16,8 @@ module.exports = {
       code: { type: DataTypes.INTEGER, allowNull: false },
       codeurl: { type: DataTypes.UUID, allowNull: false },
       expiryDate: { type: DataTypes.DATE, allowNull: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
+      createdAt: { type: DataTypes.DATE, allowNull: false },
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     });
   },
   down: async (queryInterface, Sequelize) => {

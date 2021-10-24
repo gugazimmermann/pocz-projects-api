@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      "plans",
+      "subscriptions",
       {
         id: {
           type: DataTypes.UUID,
@@ -14,20 +14,31 @@ module.exports = {
           unique: true,
           primaryKey: true,
         },
-        preapprovalPlanId: { type: DataTypes.TEXT, allowNull: false },
-        collectorId: { type: DataTypes.BIGINT, allowNull: false },
-        applicationId: { type: DataTypes.BIGINT, allowNull: false },
         reason: { type: DataTypes.TEXT, allowNull: false },
-        status: { type: DataTypes.TEXT, allowNull: false },
-        initPoint: { type: DataTypes.TEXT, allowNull: false },
         frequency: { type: DataTypes.INTEGER, allowNull: false },
         frequencyType: { type: DataTypes.TEXT, allowNull: false },
         transactionAmount: { type: DataTypes.DOUBLE, allowNull: false },
-        currencyId: { type: DataTypes.TEXT, allowNull: false },
         type: { type: DataTypes.TEXT, allowNull: false },
-        createdAt: { type: Sequelize.DATE, allowNull: false },
-        updatedAt: { type: Sequelize.DATE, allowNull: false },
-        deletedAt: { type: Sequelize.DATE, allowNull: true },
+        status: { type: DataTypes.BOOLEAN, allowNull: false },
+        planId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'plans',
+            key: 'id'
+          },
+          allowNull: false
+        },
+        userId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'users',
+            key: 'id'
+          },
+          allowNull: false
+        },
+        createdAt: { type: DataTypes.DATE, allowNull: false },
+        updatedAt: { type: DataTypes.DATE, allowNull: false },
+        deletedAt: { type: DataTypes.DATE, allowNull: true },
       },
       {
         paranoid: true,
@@ -36,6 +47,6 @@ module.exports = {
     );
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("plans");
+    await queryInterface.dropTable("subscriptions");
   },
 };

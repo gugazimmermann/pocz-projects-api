@@ -17,8 +17,8 @@ module.exports = {
       code: { type: DataTypes.INTEGER, allowNull: false },
       userId: { type: DataTypes.UUID, allowNull: false },
       tenantId: { type: DataTypes.UUID, allowNull: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
+      createdAt: { type: DataTypes.DATE, allowNull: false },
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     });
   },
   down: async (queryInterface, Sequelize) => {

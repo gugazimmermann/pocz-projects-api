@@ -1,25 +1,21 @@
 "use strict";
-const { DataTypes } = require("sequelize");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
-      "payments",
+      "users",
       {
         id: {
-          type: DataTypes.UUID,
-          defaultValue: DataTypes.UUIDV4,
+          type: Sequelize.UUID,
+          defaultValue: Sequelize.UUIDV4,
           autoIncrement: false,
           allowNull: false,
           unique: true,
           primaryKey: true,
         },
-        transactionAmount: { type: DataTypes.DOUBLE, allowNull: false },
-        status: { type: DataTypes.TEXT, allowNull: false },
-        paidDate: { type: DataTypes.DATE, allowNull: false },
-        subscriptionId: { type: DataTypes.UUID, allowNull: false },
-        creditcardId: { type: DataTypes.UUID, allowNull: false },
-        userId: { type: DataTypes.UUID, allowNull: false },
+        email: { type: Sequelize.TEXT, allowNull: false },
+        password: { type: Sequelize.TEXT, allowNull: false },
+        tenant: { type: Sequelize.UUID, allowNull: true },
+        active: { type: Sequelize.BOOLEAN, allowNull: false },
         createdAt: { type: Sequelize.DATE, allowNull: false },
         updatedAt: { type: Sequelize.DATE, allowNull: false },
         deletedAt: { type: Sequelize.DATE, allowNull: true },
@@ -31,6 +27,6 @@ module.exports = {
     );
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("payments");
+    await queryInterface.dropTable("users");
   },
 };

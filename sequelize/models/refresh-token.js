@@ -1,4 +1,6 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class RefreshToken extends Model {
     /**
@@ -21,5 +23,8 @@ export default (sequelize, DataTypes) => {
       modelName: "refresh_tokens",
     }
   );
+  RefreshToken.beforeCreate((refreshToken) => {
+    refreshToken.id = uuidv4();
+  });
   return RefreshToken;
 };

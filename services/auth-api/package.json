@@ -1,5 +1,5 @@
 {
-  "name": "test-api",
+  "name": "auth-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,8 +10,15 @@
     "offline:prod": "sls offline --stage production",
     "deploy:prod": "sls deploy --stage production",
     "remove:prod": "sls remove --stage production",
-    "test": "npm --prefix ./../../ test test-api"
+    "test": "npm --prefix ./../../ test auth-api"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.5"
+  }
 }

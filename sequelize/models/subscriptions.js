@@ -1,13 +1,10 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class Subscriptions extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Subscriptions.hasMany(models.Payments);
     }
   }
   Subscriptions.init(
@@ -26,5 +23,8 @@ export default (sequelize, DataTypes) => {
       modelName: "subscriptions",
     }
   );
+  Subscriptions.beforeCreate((subscription) => {
+    subscription.id = uuidv4();
+  });
   return Subscriptions;
 };

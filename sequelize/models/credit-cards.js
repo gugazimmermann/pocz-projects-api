@@ -1,13 +1,10 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class CreditCards extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      CreditCards.hasMany(models.Payments);
     }
   }
   CreditCards.init(
@@ -25,5 +22,8 @@ export default (sequelize, DataTypes) => {
       modelName: "credit_cards",
     }
   );
+  CreditCards.beforeCreate((creditCard) => {
+    creditCard.id = uuidv4();
+  });
   return CreditCards;
 };

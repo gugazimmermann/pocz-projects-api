@@ -1,4 +1,6 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class Profiles extends Model {
     /**
@@ -30,5 +32,8 @@ export default (sequelize, DataTypes) => {
       modelName: "profiles",
     }
   );
+  Profiles.beforeCreate((profile) => {
+    profile.id = uuidv4();
+  });
   return Profiles;
 };

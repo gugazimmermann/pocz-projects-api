@@ -26,9 +26,9 @@ module.exports = {
         state: { type: DataTypes.TEXT, allowNull: false },
         active: { type: DataTypes.BOOLEAN, allowNull: false },
         tenantId: { type: DataTypes.UUID, allowNull: false },
-        createdAt: { type: Sequelize.DATE, allowNull: false },
-        updatedAt: { type: Sequelize.DATE, allowNull: false },
-        deletedAt: { type: Sequelize.DATE, allowNull: true },
+        createdAt: { type: DataTypes.DATE, allowNull: false },
+        updatedAt: { type: DataTypes.DATE, allowNull: false },
+        deletedAt: { type: DataTypes.DATE, allowNull: true },
       },
       {
         paranoid: true,

@@ -1,13 +1,17 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class Users extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Users.belongsToMany(models.Roles, {
+        through: { model: "user_roles" },
+      });
+      Users.hasOne(models.Profiles);
+      Users.hasOne(models.RefreshToken);
+      Users.hasOne(models.Subscriptions);
+      Users.hasMany(models.CreditCards);
+      Users.hasMany(models.Payments);
     }
   }
   Users.init(
@@ -22,5 +26,8 @@ export default (sequelize, DataTypes) => {
       modelName: "users",
     }
   );
+  Users.beforeCreate((user) => {
+    user.id = uuidv4();
+  });
   return Users;
 };

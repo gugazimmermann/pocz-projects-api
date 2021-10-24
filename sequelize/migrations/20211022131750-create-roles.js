@@ -13,8 +13,8 @@ module.exports = {
         primaryKey: true,
       },
       name: { type: DataTypes.TEXT, allowNull: false },
-      createdAt: { type: Sequelize.DATE, allowNull: false },
-      updatedAt: { type: Sequelize.DATE, allowNull: false },
+      createdAt: { type: DataTypes.DATE, allowNull: false },
+      updatedAt: { type: DataTypes.DATE, allowNull: false },
     });
   },
   down: async (queryInterface, Sequelize) => {

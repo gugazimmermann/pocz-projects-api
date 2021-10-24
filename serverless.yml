@@ -3,7 +3,6 @@ app: pocz-api
 service: api
 
 frameworkVersion: "2"
-
 useDotenv: true
 variablesResolutionMode: 20210326
 
@@ -22,15 +21,15 @@ custom:
     ignorePackages:
       - pg-native
   variables:
-    POSTGRES_SG: ${env:POSTGRES_SG, 'sg-111'}
-    POSTGRES_SN_1: ${env:POSTGRES_SN_1, 'subnet-111'}
-    POSTGRES_SN_2: ${env:POSTGRES_SN_2, 'subnet-222'}
-    POSTGRES_SN_3: ${env:POSTGRES_SN_3, 'subnet-333'}
-    POSTGRES_SN_4: ${env:POSTGRES_SN_4, 'subnet-444'}
-    POSTGRES_SN_5: ${env:POSTGRES_SN_5, 'subnet-555'}
-    POSTGRES_SN_6: ${env:POSTGRES_SN_6, 'subnet-666'}
+    POSTGRES_SG: ${env:POSTGRES_SG}
+    POSTGRES_SN_1: ${env:POSTGRES_SN_1}
+    POSTGRES_SN_2: ${env:POSTGRES_SN_2}
+    POSTGRES_SN_3: ${env:POSTGRES_SN_3}
+    POSTGRES_SN_4: ${env:POSTGRES_SN_4}
+    POSTGRES_SN_5: ${env:POSTGRES_SN_5}
+    POSTGRES_SN_6: ${env:POSTGRES_SN_6}
   customDomain:
-    domainName: ${env:PROJECT_API_DOMAIN, 'localhost'}
+    domainName: ${env:PROJECT_API_DOMAIN}
     basePath: ""
     stage: ${self:provider.stage}
     createRoute53Record: true
@@ -50,17 +49,18 @@ provider:
   lambdaHashingVersion: 20201221
   vpc:
     securityGroupIds:
-      - ${env:POSTGRES_SG, self:custom.variables.POSTGRES_SG}
+      - ${self:custom.variables.POSTGRES_SG}
     subnetIds:
-      - ${env:POSTGRES_SN_1, self:custom.variables.POSTGRES_SN_1}
-      - ${env:POSTGRES_SN_2, self:custom.variables.POSTGRES_SN_2}
-      - ${env:POSTGRES_SN_3, self:custom.variables.POSTGRES_SN_3}
-      - ${env:POSTGRES_SN_4, self:custom.variables.POSTGRES_SN_4}
-      - ${env:POSTGRES_SN_5, self:custom.variables.POSTGRES_SN_5}
-      - ${env:POSTGRES_SN_6, self:custom.variables.POSTGRES_SN_6}
+      - ${self:custom.variables.POSTGRES_SN_1}
+      - ${self:custom.variables.POSTGRES_SN_2}
+      - ${self:custom.variables.POSTGRES_SN_3}
+      - ${self:custom.variables.POSTGRES_SN_4}
+      - ${self:custom.variables.POSTGRES_SN_5}
+      - ${self:custom.variables.POSTGRES_SN_6}
   region: us-east-1
   environment:
     NODE_ENV: ${self:provider.stage}
+    JWT_SECRET: ${env:JWT_SECRET}
   tracing:
     lambda: true
   iamRoleStatements:
@@ -88,6 +88,7 @@ functions:
       - { Ref: DotenvPgSequelizeLambdaLayer }
 
 resources:
+  - Description: The main stack for ${env:PROJECT_NAME}
   - Outputs:
       ApiGatewayRestApiId:
         Value:
