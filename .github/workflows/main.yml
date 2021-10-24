@@ -33,8 +33,8 @@ jobs:
         run: npm install -g yarn
       - name: Install Serverless Framework
         run: npm install -g serverless
-      - name: Serverless Authentication
-        run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_ID}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      # - name: Serverless Authentication
+      #   run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_ID}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY}}
       - name: Install NPM dependencies
         run: yarn install
       - name: Deploy Production
