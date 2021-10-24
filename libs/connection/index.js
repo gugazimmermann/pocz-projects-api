@@ -9,6 +9,7 @@ import SubscriptionsModel from "../../sequelize/models/subscriptions";
 import CreditCardsModel from "../../sequelize/models/credit-cards";
 import PaymentsModel from "../../sequelize/models/payments";
 import RefreshTokenModel from "../../sequelize/models/refresh-token";
+import ForgotPasswordModel from "../../sequelize/models/forgot-password";
 
 const env = process.env.NODE_ENV || "development";
 dotenv.config({ path: `../../.env.${env}` });
@@ -62,6 +63,7 @@ const db = {
   CreditCards: CreditCardsModel(sequelize, Sequelize),
   Payments: PaymentsModel(sequelize, Sequelize),
   RefreshToken: RefreshTokenModel(sequelize, Sequelize),
+  ForgotPassword: ForgotPasswordModel(sequelize, Sequelize),
 };
 
 db.Users.belongsToMany(db.Roles, { through: { model: "user_roles" } });

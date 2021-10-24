@@ -1,4 +1,6 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class ForgotPassword extends Model {
     /**
@@ -22,5 +24,8 @@ export default (sequelize, DataTypes) => {
       modelName: "forgot_passwords",
     }
   );
+  ForgotPassword.beforeCreate((forgotPassword) => {
+    forgotPassword.id = uuidv4();
+  });
   return ForgotPassword;
 };

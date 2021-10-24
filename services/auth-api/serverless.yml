@@ -16,49 +16,32 @@ plugins:
   - serverless-bundle
   - serverless-offline
   - serverless-dotenv-plugin
-  
+  - serverless-iam-roles-per-function
+
 custom:
   bundle:
     ignorePackages:
       - pg-native
-  variables:
-    POSTGRES_SG: ${env:POSTGRES_SG, 'sg-111'}
-    POSTGRES_SN_1: ${env:POSTGRES_SN_1, 'subnet-111'}
-    POSTGRES_SN_2: ${env:POSTGRES_SN_2, 'subnet-222'}
-    POSTGRES_SN_3: ${env:POSTGRES_SN_3, 'subnet-333'}
-    POSTGRES_SN_4: ${env:POSTGRES_SN_4, 'subnet-444'}
-    POSTGRES_SN_5: ${env:POSTGRES_SN_5, 'subnet-555'}
-    POSTGRES_SN_6: ${env:POSTGRES_SN_6, 'subnet-666'}
-  lambdaPolicyXRay:
-    Effect: Allow
-    Action:
-      - xray:PutTraceSegments
-      - xray:PutTelemetryRecords
-    Resource: "*"
 
 provider:
   name: aws
   runtime: nodejs14.x
   stage: ${opt:stage, "development"}
-  lambdaHashingVersion: 20201221
-  vpc:
-    securityGroupIds:
-      - ${self:custom.variables.POSTGRES_SG}
-    subnetIds:
-      - ${self:custom.variables.POSTGRES_SN_1}
-      - ${self:custom.variables.POSTGRES_SN_2}
-      - ${self:custom.variables.POSTGRES_SN_3}
-      - ${self:custom.variables.POSTGRES_SN_4}
-      - ${self:custom.variables.POSTGRES_SN_5}
-      - ${self:custom.variables.POSTGRES_SN_6}
   region: us-east-1
+  lambdaHashingVersion: 20201221
   environment:
     NODE_ENV: ${self:provider.stage}
     JWT_SECRET: ${env:JWT_SECRET}
+    PROJECT_NAME: ${env:PROJECT_NAME}
+    PROJECT_APP_URL: ${env:PROJECT_APP_URL}
   tracing:
     lambda: true
   iamRoleStatements:
-    - ${self:custom.lambdaPolicyXRay}
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
   apiGateway:
     restApiId:
       'Fn::ImportValue': ${self:provider.stage}-ApiGatewayRestApiId
@@ -87,6 +70,56 @@ functions:
     layers:
       - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
       - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  forgot-password:
+    handler: forgot-password.handler
+    events:
+      - http:
+          path: /auth/forgot-password
+          method: post
+          cors: true
+    layers:
+      - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+      - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "ses:SendEmail"
+          - "ses:SendRawEmail"
+        Resource: "*"
+
+  forgot-password-code:
+    handler: forgot-password-code.handler
+    events:
+      - http:
+          path: /auth/forgot-password-code
+          method: post
+          cors: true
+    layers:
+      - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+      - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  change-password:
+    handler: change-password.handler
+    events:
+      - http:
+          path: /auth/change-password
+          method: post
+          cors: true
+    layers:
+      - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+      - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  refresh-token:
+      handler: refresh-token.handler
+      events:
+        - http:
+            path: /auth/refresh-token
+            method: post
+            cors: true
+      layers:
+        - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+        - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
 
   verify:
     handler: verify.handler
