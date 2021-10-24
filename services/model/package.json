@@ -1,5 +1,5 @@
 {
-  "name": "auth-api",
+  "name": "model",
   "version": "1.0.0",
   "scripts": {
     "offline:dev": "sls offline --stage development",
@@ -8,15 +8,6 @@
     "offline:prod": "sls offline --stage production",
     "deploy:prod": "sls deploy --stage production",
     "remove:prod": "sls remove --stage production",
-    "test": "npm --prefix ./../../ test auth-api"
-  },
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "luxon": "^2.0.2"
-  },
-  "devDependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "@types/jsonwebtoken": "^8.5.5",
-    "@types/luxon": "^2.0.5"
+    "test": "npm --prefix ./../../ model model"
   }
 }
