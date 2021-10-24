@@ -1,0 +1,96 @@
+org: gugazimmermann
+app: pocz-api
+service: subscriptions-api
+
+resources:
+  - Description: Subscriptions API for ${env:PROJECT_NAME}
+
+frameworkVersion: "2"
+useDotenv: true
+variablesResolutionMode: 20210326
+
+package:
+  individually: true
+
+plugins:
+  - serverless-bundle
+  - serverless-offline
+  - serverless-dotenv-plugin
+
+custom:
+  bundle:
+    ignorePackages:
+      - pg-native
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: ${opt:stage, "development"}
+  region: us-east-1
+  lambdaHashingVersion: 20201221
+  environment:
+    NODE_ENV: ${self:provider.stage}
+  tracing:
+    lambda: true
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: "*"
+  apiGateway:
+    restApiId:
+      'Fn::ImportValue': ${self:provider.stage}-ApiGatewayRestApiId
+    restApiRootResourceId:
+      'Fn::ImportValue': ${self:provider.stage}-ApiGatewayRestApiRootResourceId
+
+functions:
+  subscriptions:
+    handler: subscriptions.handler
+    events:
+      - http:
+          path: /subscriptions
+          method: get
+          cors: true
+          authorizer:
+            arn: ${cf:auth-api-${self:provider.stage}.VerifyLambdaFunctionQualifiedArn}
+    layers:
+      - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+      - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  plans:
+      handler: plans.handler
+      events:
+        - http:
+            path: /subscriptions/plans
+            method: get
+            cors: true
+      layers:
+        - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+        - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  payments:
+      handler: payments.handler
+      events:
+        - http:
+            path: /subscriptions/payments
+            method: get
+            cors: true
+            authorizer:
+              arn: ${cf:auth-api-${self:provider.stage}.VerifyLambdaFunctionQualifiedArn}
+      layers:
+        - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+        - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}
+
+  credit-cards:
+        handler: credit-cards.handler
+        events:
+          - http:
+              path: /subscriptions/credit-cards
+              method: get
+              cors: true
+              authorizer:
+                arn: ${cf:auth-api-${self:provider.stage}.VerifyLambdaFunctionQualifiedArn}
+        layers:
+          - ${cf:api-${self:provider.stage}.PgLambdaLayerQualifiedArn}
+          - ${cf:api-${self:provider.stage}.DotenvPgSequelizeLambdaLayerQualifiedArn}

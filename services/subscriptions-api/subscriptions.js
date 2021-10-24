@@ -14,19 +14,14 @@ export const handler = async (event, context) => {
     return CreateResponse(401, { message: "Não Autorizado!" });
   }
   try {
-    const { Users } = await database();
-    const user = await Users.findByPk(decoded.id);
-    if (!user) {
-      return CreateResponse(404, { message: "Usuário não encontrado!" });
+    const { Subscriptions } = await database();
+    console.log(decoded.id);
+    const subscription = await Subscriptions.findOne({ where: { userId: decoded.id}});
+    console.log(subscription);
+    if (!subscription) {
+      return CreateResponse(404, { message: "Assinatura não encontrada!" });
     }
-    return CreateResponse(200, {
-      body: {
-        active: user.active,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
-    });
+    return CreateResponse(200, { body: subscription });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, err.message);
   }

@@ -14,19 +14,11 @@ export const handler = async (event, context) => {
     return CreateResponse(401, { message: "Não Autorizado!" });
   }
   try {
-    const { Users } = await database();
-    const user = await Users.findByPk(decoded.id);
-    if (!user) {
-      return CreateResponse(404, { message: "Usuário não encontrado!" });
-    }
-    return CreateResponse(200, {
-      body: {
-        active: user.active,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      },
+    const { CreditCards } = await database();
+    const creditCards = await CreditCards.findOne({
+      where: { userId: decoded.id },
     });
+    return CreateResponse(200, { body: creditCards });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, err.message);
   }

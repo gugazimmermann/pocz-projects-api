@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
-import config from "./config";
+import config from "../../libs/jwt-config";
 
 export const handler = async (event, context) => {
   const body = JSON.parse(event.body);

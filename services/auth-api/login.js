@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { v4 as uuidv4 } from "uuid";
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
-import config from "./config";
+import config from "../../libs/jwt-config";
 import { validateEmail } from "../../libs/utils";
 
 export const handler = async (event, context) => {

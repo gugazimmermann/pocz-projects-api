@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import config from "./config";
+import config from "../../libs/jwt-config";
 
 function generateAuthResponse(principalId, effect, methodArn) {
   const policyDocument = generatePolicyDocument(effect, methodArn);
@@ -14,7 +14,7 @@ function generatePolicyDocument(effect, methodArn) {
       {
         Action: "execute-api:Invoke",
         Effect: effect,
-        Resource: methodArn,
+        Resource: "*"
       },
     ],
   };

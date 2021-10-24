@@ -1,0 +1,17 @@
+{
+  "name": "subscriptions-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "offline:dev": "sls offline --stage development",
+    "deploy:dev": "sls deploy --stage development",
+    "remove:dev": "sls remove --stage development",
+    "offline:prod": "sls offline --stage production",
+    "deploy:prod": "sls deploy --stage production",
+    "remove:prod": "sls remove --stage production",
+    "test": "npm --prefix ./../../ test subscriptions-api"
+  },
+  "author": "",
+  "license": "ISC"
+}
