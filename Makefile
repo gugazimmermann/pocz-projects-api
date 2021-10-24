@@ -7,5 +7,6 @@ deploy-prod:
 	cp .env.development .env.production services/subscriptions-api
 	$(MAKE) -C services/subscriptions-api deploy-prod
 
+clean:
 	$(MAKE) -C services/auth-api clean
 	$(MAKE) -C services/subscriptions-api clean
