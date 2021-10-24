@@ -27,7 +27,8 @@ jobs:
           echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env.production
           echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env.production
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env.production
-          cat .env
+          cat .env.production
+          cp .env.production ./.env.development
       - name: Install Yarn
         run: npm install -g yarn
       - name: Install Serverless Framework
