@@ -32,6 +32,6 @@ export const handler = async (event, context) => {
       return CreateResponse(401, { message: "Código expirado!" });
     }
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

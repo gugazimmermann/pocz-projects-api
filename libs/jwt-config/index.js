@@ -1,3 +1,11 @@
+import dotenv from "dotenv";
+const env = process.env.NODE_ENV || "development";
+const configPath =
+  env === "development" || env === "test"
+    ? `.env.development`
+    : `.env.production`;
+dotenv.config({ path: configPath });
+
 const config = {
   jwtSecret: process.env.JWT_SECRET,
   // jwtExpiration: 60,

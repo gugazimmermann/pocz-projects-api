@@ -35,6 +35,26 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: "eb07ecc2-fd14-480a-a9a8-354b1918ef93",
+          email: "test@test.com.br",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "fd6bc51e-195e-4433-b404-8a9fdfa0f632",
+          active: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "0305aa94-ef0a-4d96-a3b9-ebe54c2947cb",
+          email: "test2@test.com.br",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "fd6bc51e-195e-4433-b404-8a9fdfa0f632",
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

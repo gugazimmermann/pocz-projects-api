@@ -88,6 +88,6 @@ export const handler = async (event, context) => {
     });
     return CreateResponse(201, { message: "Usuário cadastrado com sucesso!" });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode, err.message);
   }
 };

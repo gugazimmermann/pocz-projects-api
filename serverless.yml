@@ -20,6 +20,11 @@ custom:
   bundle:
     ignorePackages:
       - pg-native
+    forceExclude:
+      - pg
+      - pg-hstore
+      - dotenv
+      - sequelize
   customDomain:
     domainName: ${env:PROJECT_API_DOMAIN}
     basePath: ""

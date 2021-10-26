@@ -3,17 +3,29 @@
   "version": "0.1.0",
   "private": true,
   "main": "handler.js",
+  "jest": {
+    "collectCoverageFrom": [
+      "libs/**/*.js",
+      "services/**/*.js",
+      "!services/model/*.js",
+      "!services/test-db/*.js"
+    ]
+  },
   "scripts": {
+    "reset:db": "yarn destroy:db && yarn start:db && sleep 5 && yarn migrate:db && yarn seed:db",
     "start:db": "docker-compose --env-file ./.env.development up -d",
     "stop:db": "docker-compose down",
-    "destroy:db": "docker volume prune",
-    "offline:dev": "sls offline --stage development",
-    "deploy:dev": "sls deploy --stage development",
-    "remove:dev": "sls remove --stage development",
-    "offline:prod": "sls offline --stage production",
-    "deploy:prod": "sls deploy --stage production",
-    "remove:prod": "sls remove --stage production",
-    "test": "serverless-bundle test"
+    "destroy:db": "docker-compose down && docker volume prune",
+    "migrate:db": "NODE_ENV=development yarn sequelize-cli db:migrate && NODE_ENV=test yarn sequelize-cli db:migrate",
+    "seed:db": "NODE_ENV=development yarn sequelize-cli db:seed:all && NODE_ENV=test yarn sequelize-cli db:seed:all",
+    "offline:dev": "NODE_ENV=development sls offline --stage development",
+    "deploy:dev": "NODE_ENV=development sls deploy --stage development",
+    "remove:dev": "NODE_ENV=development sls remove --stage development",
+    "offline:prod": "NODE_ENV=production sls offline --stage production",
+    "deploy:prod": "NODE_ENV=production sls deploy --stage production",
+    "remove:prod": "NODE_ENV=production sls remove --stage production",
+    "seed:test": "NODE_ENV=test yarn sequelize-cli db:migrate || true && NODE_ENV=test yarn sequelize-cli db:seed:all || true",
+    "test": "yes | yarn reset:db && NODE_ENV=test serverless-bundle test --colors ----collectCoverage"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
@@ -24,9 +36,14 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/faker": "^5.5.9",
+    "@types/jsonwebtoken": "^8.5.5",
+    "@types/luxon": "^2.0.5",
     "@types/pg": "^8.6.1",
     "@types/uuid": "^8.3.1",
     "aws-sdk": "^2.1013.0",
+    "aws-sdk-mock": "^5.4.0",
+    "faker": "^5.5.3",
     "sequelize-cli": "^6.2.0",
     "serverless-bundle": "4.3.1",
     "serverless-domain-manager": "^5.1.5",

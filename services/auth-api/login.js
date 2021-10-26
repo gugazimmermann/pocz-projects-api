@@ -27,7 +27,7 @@ export const handler = async (event, context) => {
     if (!passwordIsValid) {
       return CreateResponse(404, { message: "Email ou senha inválidos!" });
     }
-    if (!user.subscription || !user.subscription.status) {
+    if (!user.subscription) {
       return CreateResponse(404, { message: "Assinatura não encontrada!" });
     }
     const accessToken = jwt.sign({ id: user.id }, config.jwtSecret, {
@@ -41,9 +41,13 @@ export const handler = async (event, context) => {
       userId: user.id,
     });
     return CreateResponse(200, {
-      body: { auth: true, status: "SUCCESS", accessToken, refreshToken, tenant: user.tenant },
+      auth: true,
+      status: "SUCCESS",
+      accessToken,
+      refreshToken,
+      tenant: user.tenant,
     });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

@@ -14,10 +14,8 @@ export const handler = async (event, context) => {
     if (!forgotPassword) {
       return CreateResponse(404, { message: "Código não encontrado!" });
     }
-    return CreateResponse(200, {
-      body: { code: forgotPassword.code },
-    });
+    return CreateResponse(200, { code: forgotPassword.code });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

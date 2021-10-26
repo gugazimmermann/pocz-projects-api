@@ -5,8 +5,8 @@ export const handler = async (event, context) => {
   try {
     const { Plans } = await database();
     const plans = await Plans.findAll();
-    return CreateResponse(200, { body: plans });
+    return CreateResponse(200, { plans });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

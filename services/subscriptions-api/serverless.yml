@@ -21,6 +21,11 @@ custom:
   bundle:
     ignorePackages:
       - pg-native
+    forceExclude:
+      - pg
+      - pg-hstore
+      - dotenv
+      - sequelize
 
 provider:
   name: aws

@@ -1,6 +1,10 @@
-const pg = require('pg');
-const envPath = process.env.NODE_ENV || 'development';
-require('dotenv').config({ path: `.env.${envPath}` });
+const pg = require("pg");
+const env = process.env.NODE_ENV || "development";
+const configPath =
+  env === "development" || env === "test"
+    ? `.env.development`
+    : `.env.production`;
+require("dotenv").config({ path: configPath });
 
 module.exports = {
   development: {
@@ -10,16 +14,16 @@ module.exports = {
     host: process.env.POSTGRES_HOST,
     port: 5432,
     dialect: "postgres",
-    dialectModule: pg
+    dialectModule: pg,
   },
   test: {
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
     database: `${process.env.POSTGRES_DB}_test`,
     host: process.env.POSTGRES_HOST,
-    port: 5432,
+    port: 5430,
     dialect: "postgres",
-    dialectModule: pg
+    dialectModule: pg,
   },
   production: {
     username: process.env.POSTGRES_USER,
@@ -28,6 +32,6 @@ module.exports = {
     host: process.env.POSTGRES_HOST,
     port: 5432,
     dialect: "postgres",
-    dialectModule: pg
+    dialectModule: pg,
   },
 };

@@ -4,23 +4,25 @@ import CreateResponse from "../../libs/response";
 import config from "../../libs/jwt-config";
 
 export const handler = async (event, context) => {
-  const authorization = event.headers.Authorization;
+  const authorization = event?.headers?.Authorization;
   if (!authorization) {
     return CreateResponse(400, { message: "Autorização não encontrada!" });
   }
   const token = authorization.replace("Bearer ", "");
-  const decoded = jwt.verify(token, config.jwtSecret);
-  if (!decoded || !decoded.id) {
+  let decoded;
+  try {
+    decoded = jwt.verify(token, config.jwtSecret);
+  } catch (err) {
     return CreateResponse(401, { message: "Não Autorizado!" });
   }
   try {
     const { Payments } = await database();
-    const payments = await Payments.findOne({
+    const payments = await Payments.findAll({
       where: { userId: decoded.id },
       order: [["paidDate", "DESC"]],
     });
-    return CreateResponse(200, { body: payments });
+    return CreateResponse(200, { payments });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

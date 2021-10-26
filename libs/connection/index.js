@@ -12,7 +12,11 @@ import RefreshTokenModel from "../../sequelize/models/refresh-token";
 import ForgotPasswordModel from "../../sequelize/models/forgot-password";
 
 const env = process.env.NODE_ENV || "development";
-dotenv.config({ path: `../../.env.${env}` });
+const configPath =
+  env === "development" || env === "test"
+    ? `.env.development`
+    : `.env.production`;
+dotenv.config({ path: configPath });
 
 const databaseConfig = {
   development: {
@@ -29,7 +33,7 @@ const databaseConfig = {
     password: process.env.POSTGRES_PASSWORD,
     database: `${process.env.POSTGRES_DB}_test`,
     host: process.env.POSTGRES_HOST,
-    port: 5432,
+    port: 5430,
     dialect: "postgres",
     dialectModule: pg,
   },
@@ -79,15 +83,17 @@ db.Users.hasMany(db.Payments);
 
 const connection = {};
 
+export async function close() {
+  connection.isConnected = false;
+  db.Sequelize.close();
+}
+
 async function database() {
   if (connection.isConnected) {
-    console.log("=> Using existing connection.");
     return db;
   }
-  // await sequelize.sync();
   await sequelize.authenticate();
   connection.isConnected = true;
-  console.log("=> Created a new connection.");
   return db;
 }
 

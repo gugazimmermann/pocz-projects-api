@@ -16,7 +16,8 @@ export const handler = async (event, context) => {
     if (!refreshToken) {
       return CreateResponse(404, { message: "Refresh token não encontrado!" });
     }
-    const verifyExpiration = refreshToken.expiryDate.getTime() < new Date().getTime();
+    const verifyExpiration =
+      refreshToken.expiryDate.getTime() < new Date().getTime();   
     if (verifyExpiration) {
       await RefreshToken.destroy({ where: { id: refreshToken.id } });
       return CreateResponse(403, {
@@ -34,6 +35,6 @@ export const handler = async (event, context) => {
       },
     });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };
