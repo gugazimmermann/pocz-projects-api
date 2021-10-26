@@ -3,8 +3,6 @@ import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 import config from "../../libs/jwt-config";
 
-const userId = "fd6bc51e-195e-4433-b404-8a9fdfa0f632";
-
 export const handler = async (event, context) => {
   const authorization = event?.headers?.Authorization;
   if (!authorization) {
