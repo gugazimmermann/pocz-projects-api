@@ -1,29 +1,17 @@
-import jwt from "jsonwebtoken";
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
-import config from "../../libs/jwt-config";
+import DecodedId from "../../libs/decoded-id";
 
 export const handler = async (event, context) => {
-  const authorization = event?.headers?.Authorization;
-  if (!authorization) {
-    return CreateResponse(400, { message: "Autorização não encontrada!" });
-  }
-  const token = authorization.replace("Bearer ", "");
-  let decoded;
   try {
-    decoded = jwt.verify(token, config.jwtSecret);
-  } catch (err) {
-    return CreateResponse(401, { message: "Não Autorizado!" });
-  }
-  try {
+    const user = await DecodedId(event);
     const { Subscriptions } = await database();
-    const subscription = await Subscriptions.findOne({
-      where: { userId: decoded.id },
+    const data = await Subscriptions.findOne({
+      where: { userId: user.id },
     });
-    if (!subscription) {
+    if (!data)
       return CreateResponse(404, { message: "Assinatura não encontrada!" });
-    }
-    return CreateResponse(200, { subscription });
+    return CreateResponse(200, { data });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

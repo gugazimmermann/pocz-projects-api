@@ -7,29 +7,24 @@ import config from "../../libs/jwt-config";
 import { validateEmail } from "../../libs/utils";
 
 export const handler = async (event, context) => {
-  const body = JSON.parse(event.body);
-  if (!body.email || !validateEmail(body.email) || !body.password) {
+  const { email, password } = JSON.parse(event?.body);
+  if (!email || !validateEmail(email) || !password)
     return CreateResponse(400, { message: "Dados inválidos!" });
-  }
   try {
     const { Users, RefreshToken } = await database();
     const user = await Users.findOne({
       where: { email: body.email },
       include: "subscription",
     });
-    if (!user) {
+    if (!user)
       return CreateResponse(404, { message: "Email ou senha inválidos!" });
-    }
-    if (!user.active) {
+    if (!user.active)
       return CreateResponse(401, { message: "Cadastro Inativo!" });
-    }
-    const passwordIsValid = bcrypt.compareSync(body.password, user.password);
-    if (!passwordIsValid) {
-      return CreateResponse(404, { message: "Email ou senha inválidos!" });
-    }
-    if (!user.subscription) {
+    if (!user.subscription)
       return CreateResponse(404, { message: "Assinatura não encontrada!" });
-    }
+    const passwordIsValid = bcrypt.compareSync(body.password, user.password);
+    if (!passwordIsValid)
+      return CreateResponse(404, { message: "Email ou senha inválidos!" });
     const accessToken = jwt.sign({ id: user.id }, config.jwtSecret, {
       expiresIn: config.jwtExpiration,
     });

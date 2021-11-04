@@ -20,8 +20,22 @@ module.exports = {
         color: { type: DataTypes.TEXT, allowNull: true },
         title: { type: DataTypes.TEXT, allowNull: true },
         description: { type: DataTypes.TEXT, allowNull: true },
-        userId: { type: DataTypes.UUID, allowNull: true },
-        placeId: { type: DataTypes.UUID, allowNull: true },
+        userId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'users',
+            key: 'id'
+          },
+          allowNull: false
+        },
+        placeId: { 
+          type: DataTypes.UUID, 
+          references: {
+            model: 'places',
+            key: 'id'
+          },
+          allowNull: false
+        },
         tenantId: { type: DataTypes.UUID, allowNull: true },
         createdAt: { type: DataTypes.DATE, allowNull: false },
         updatedAt: { type: DataTypes.DATE, allowNull: false },

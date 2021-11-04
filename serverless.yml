@@ -2,6 +2,9 @@ org: gugazimmermann
 app: pocz-api
 service: api
 
+resources:
+  - Description: The main stack for ${env:PROJECT_NAME}
+
 frameworkVersion: "2"
 useDotenv: true
 variablesResolutionMode: 20210326
@@ -15,6 +18,7 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-domain-manager
   - serverless-sequelize-migrations
+  - serverless-iam-roles-per-function
 
 custom:
   bundle:
@@ -25,6 +29,7 @@ custom:
       - pg-hstore
       - dotenv
       - sequelize
+
   customDomain:
     domainName: ${env:PROJECT_API_DOMAIN}
     basePath: ""
@@ -42,6 +47,8 @@ provider:
   environment:
     NODE_ENV: ${self:provider.stage}
     JWT_SECRET: ${env:JWT_SECRET}
+    PROJECT_NAME: ${env:PROJECT_NAME}
+    PROJECT_APP_URL: ${env:PROJECT_APP_URL}
   tracing:
     lambda: true
   iamRoleStatements:
@@ -50,7 +57,7 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: "*"
-      
+
 layers:
   pg:
     path: layers/postgre
@@ -72,19 +79,493 @@ functions:
       - { Ref: PgLambdaLayer }
       - { Ref: DotenvPgSequelizeLambdaLayer }
 
-resources:
-  - Description: The main stack for ${env:PROJECT_NAME}
-  - Outputs:
-      ApiGatewayRestApiId:
-        Value:
-          Ref: ApiGatewayRestApi
-        Export:
-          Name: ${self:provider.stage}-ApiGatewayRestApiId
-    
-      ApiGatewayRestApiRootResourceId:
-        Value:
-           Fn::GetAtt:
-            - ApiGatewayRestApi
-            - RootResourceId 
-        Export:
-          Name: ${self:provider.stage}-ApiGatewayRestApiRootResourceId
+  # AUTH
+  auth-register:
+    handler: services/auth-api/register.handler
+    events:
+      - http:
+          path: /auth/register
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  auth-login:
+    handler: services/auth-api/login.handler
+    events:
+      - http:
+          path: /auth/login
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  auth-forgot-password:
+    handler: services/auth-api/forgot-password.handler
+    events:
+      - http:
+          path: /auth/forgot-password
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "ses:SendEmail"
+          - "ses:SendRawEmail"
+        Resource: "*"
+
+  auth-forgot-password-code:
+    handler: services/auth-api/forgot-password-code.handler
+    events:
+      - http:
+          path: /auth/forgot-password-code
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  auth-change-password:
+    handler: services/auth-api/change-password.handler
+    events:
+      - http:
+          path: /auth/change-password
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  auth-refresh-token:
+    handler: services/auth-api/refresh-token.handler
+    events:
+      - http:
+          path: /auth/refresh-token
+          method: post
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  auth-verify:
+    handler: services/auth-api/verify.handler
+
+  auth-me:
+    handler: services/auth-api/me.handler
+    events:
+      - http:
+          path: /auth/me
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  # SUBSCRIPTIONS
+  subscriptions-subscriptions:
+    handler: services/subscriptions-api/subscriptions.handler
+    events:
+      - http:
+          path: /subscriptions
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  subscriptions-plans:
+    handler: services/subscriptions-api/plans.handler
+    events:
+      - http:
+          path: /subscriptions/plans
+          method: get
+          cors: true
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  subscriptions-payments:
+    handler: services/subscriptions-api/payments.handler
+    events:
+      - http:
+          path: /subscriptions/payments
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  subscriptions-credit-cards:
+    handler: services/subscriptions-api/credit-cards.handler
+    events:
+      - http:
+          path: /subscriptions/credit-cards
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  # PLACES
+  places-get-all:
+    handler: services/places-api/get-all.handler
+    events:
+      - http:
+          path: /places
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-get-one:
+    handler: services/places-api/get-one.handler
+    events:
+      - http:
+          path: /places/{id}
+          method: get
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-create:
+    handler: services/places-api/create.handler
+    events:
+      - http:
+          path: /places
+          method: post
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-delete:
+    handler: services/places-api/delete.handler
+    events:
+      - http:
+          path: /places/{id}
+          method: delete
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-update:
+    handler: services/places-api/update.handler
+    events:
+      - http:
+          path: /places/{id}
+          method: put
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-count:
+    handler: services/places-api/count.handler
+    events:
+      - http:
+          path: /places/count
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-active:
+    handler: services/places-api/active.handler
+    events:
+      - http:
+          path: /places/active/{id}
+          method: post
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-managers:
+    handler: services/places-api/managers.handler
+    events:
+      - http:
+          path: /places/managers/{id}
+          method: post
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  places-employees:
+    handler: services/places-api/employees.handler
+    events:
+      - http:
+          path: /places/employees/{id}
+          method: post
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  # PROFILES
+  # TODO: Lambda to handle the avatar image
+  profiles-get:
+    handler: services/profiles-api/get.handler
+    events:
+      - http:
+          path: /profiles
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  profiles-update:
+    handler: services/profiles-api/update.handler
+    events:
+      - http:
+          path: /profiles
+          method: post
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+
+  # MEMBERS AND INVITES
+  members-invites:
+    handler: services/members-api/invites.handler
+    events:
+      - http:
+          path: /members/invites
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-invites-code:
+    handler: services/members-api/invites-code.handler
+    events:
+      - http:
+          path: /members/invites/code/{code}
+          method: get
+          request:
+            parameters:
+              querystrings:
+                code: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-invites-create:
+    handler: services/members-api/invites-create.handler
+    events:
+      - http:
+          path: /members/invites
+          method: post
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "ses:SendEmail"
+          - "ses:SendRawEmail"
+        Resource: "*"
+  members-invites-send:
+    handler: services/members-api/invites-send.handler
+    events:
+      - http:
+          path: /members/invites/send/{id}
+          method: get
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - "ses:SendEmail"
+          - "ses:SendRawEmail"
+        Resource: "*"
+  members-invites-delete:
+    handler: services/members-api/invites-delete.handler
+    events:
+      - http:
+          path: /members/invites/{id}
+          method: delete
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-get-all:
+    handler: services/members-api/get-all.handler
+    events:
+      - http:
+          path: /members
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-get-list:
+    handler: services/members-api/get-list.handler
+    events:
+      - http:
+          path: /members/list
+          method: get
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-get-one:
+    handler: services/members-api/get-one.handler
+    events:
+      - http:
+          path: /members/{id}
+          method: get
+          request:
+            parameters:
+              querystrings:
+                id: true
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }
+  members-create:
+    handler: services/members-api/create.handler
+    events:
+      - http:
+          path: /members
+          method: post
+          cors: true
+          authorizer:
+            name: auth-verify
+            identitySource: method.request.header.Authorization
+            resultTtlInSeconds: 3600
+    layers:
+      - { Ref: PgLambdaLayer }
+      - { Ref: DotenvPgSequelizeLambdaLayer }

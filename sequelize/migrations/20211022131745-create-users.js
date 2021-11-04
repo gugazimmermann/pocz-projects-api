@@ -1,24 +1,26 @@
 "use strict";
+const { DataTypes } = require("sequelize");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable(
       "users",
       {
         id: {
-          type: Sequelize.UUID,
-          defaultValue: Sequelize.UUIDV4,
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
           autoIncrement: false,
           allowNull: false,
           unique: true,
           primaryKey: true,
         },
-        email: { type: Sequelize.TEXT, allowNull: false },
-        password: { type: Sequelize.TEXT, allowNull: false },
-        tenant: { type: Sequelize.UUID, allowNull: true },
-        active: { type: Sequelize.BOOLEAN, allowNull: false },
-        createdAt: { type: Sequelize.DATE, allowNull: false },
-        updatedAt: { type: Sequelize.DATE, allowNull: false },
-        deletedAt: { type: Sequelize.DATE, allowNull: true },
+        email: { type: DataTypes.TEXT, allowNull: false },
+        password: { type: DataTypes.TEXT, allowNull: false },
+        tenant: { type: DataTypes.UUID, allowNull: true },
+        active: { type: DataTypes.BOOLEAN, allowNull: false },
+        createdAt: { type: DataTypes.DATE, allowNull: false },
+        updatedAt: { type: DataTypes.DATE, allowNull: false },
+        deletedAt: { type: DataTypes.DATE, allowNull: true },
       },
       {
         paranoid: true,

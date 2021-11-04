@@ -1,25 +1,24 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class Notes extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
     }
   }
   Notes.init(
     {
       title: DataTypes.TEXT,
       content: DataTypes.TEXT,
-      ownerId: DataTypes.UUID,
+      personId: DataTypes.UUID, 
     },
     {
       sequelize,
       modelName: "notes",
     }
   );
+  Notes.beforeCreate((note) => {
+    note.id = uuidv4();
+  });
   return Notes;
 };

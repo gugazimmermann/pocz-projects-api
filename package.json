@@ -15,7 +15,7 @@
     "reset:db": "yarn destroy:db && yarn start:db && sleep 5 && yarn migrate:db && yarn seed:db",
     "start:db": "docker-compose --env-file ./.env.development up -d",
     "stop:db": "docker-compose down",
-    "destroy:db": "docker-compose down && docker volume prune",
+    "destroy:db": "docker-compose down && yes | docker volume prune",
     "migrate:db": "NODE_ENV=development yarn sequelize-cli db:migrate && NODE_ENV=test yarn sequelize-cli db:migrate",
     "seed:db": "NODE_ENV=development yarn sequelize-cli db:seed:all && NODE_ENV=test yarn sequelize-cli db:seed:all",
     "offline:dev": "NODE_ENV=development sls offline --stage development",
@@ -28,14 +28,17 @@
     "test": "yes | yarn reset:db && NODE_ENV=test serverless-bundle test --colors ----collectCoverage"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "dotenv": "^10.0.0",
     "dotenv-expand": "^5.1.0",
+    "luxon": "^2.0.2",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.7.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/faker": "^5.5.9",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/luxon": "^2.0.5",

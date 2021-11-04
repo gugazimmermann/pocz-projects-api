@@ -1,13 +1,30 @@
 import { Model } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
+
 export default (sequelize, DataTypes) => {
   class Places extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
+      Places.belongsToMany(models.Users, {
+        as: "managersPlace",
+        through: { model: "place_managers" },
+      });
+      Places.belongsToMany(models.Users, {
+        as: "employeesPlace",
+        through: { model: "place_employees" },
+      });
+      Places.belongsToMany(models.Persons, {
+        as: "clientsPlace",
+        through: { model: "place_clients" },
+      });
+      Places.belongsToMany(models.Persons, {
+        as: "supliersPlace",
+        through: { model: "place_supliers" },
+      });
+      Places.belongsToMany(models.Persons, {
+        as: "contactsPlace",
+        through: { model: "place_contacts" },
+      });
+      Places.hasMany(models.Events);
     }
   }
   Places.init(
@@ -30,5 +47,8 @@ export default (sequelize, DataTypes) => {
       modelName: "places",
     }
   );
+  Places.beforeCreate((place) => {
+    place.id = uuidv4();
+  });
   return Places;
 };

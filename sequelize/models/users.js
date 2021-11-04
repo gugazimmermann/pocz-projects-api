@@ -12,6 +12,27 @@ export default (sequelize, DataTypes) => {
       Users.hasOne(models.Subscriptions);
       Users.hasMany(models.CreditCards);
       Users.hasMany(models.Payments);
+      Users.belongsToMany(models.Places, {
+        as: "placeManagers",
+        through: { model: "place_managers" },
+      });
+      Users.belongsToMany(models.Places, {
+        as: "placeEmployees",
+        through: { model: "place_employees" },
+      });
+      Users.belongsToMany(models.Persons, {
+        as: "clientsUser",
+        through: { model: "user_clients" },
+      });
+      Users.belongsToMany(models.Persons, {
+        as: "supliersUser",
+        through: { model: "user_supliers" },
+      });
+      Users.belongsToMany(models.Persons, {
+        as: "contactsUser",
+        through: { model: "user_contacts" },
+      });
+      Users.hasMany(models.Events);
     }
   }
   Users.init(

@@ -15,7 +15,14 @@ module.exports = {
       name: { type: DataTypes.TEXT, allowNull: false },
       email: { type: DataTypes.TEXT, allowNull: false },
       code: { type: DataTypes.INTEGER, allowNull: false },
-      userId: { type: DataTypes.UUID, allowNull: false },
+      userId: { 
+        type: DataTypes.UUID, 
+        references: {
+          model: 'users',
+          key: 'id'
+        },
+        allowNull: false
+      },
       tenantId: { type: DataTypes.UUID, allowNull: false },
       createdAt: { type: DataTypes.DATE, allowNull: false },
       updatedAt: { type: DataTypes.DATE, allowNull: false },

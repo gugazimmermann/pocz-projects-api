@@ -4,8 +4,8 @@ import CreateResponse from "../../libs/response";
 export const handler = async (event, context) => {
   try {
     const { Plans } = await database();
-    const plans = await Plans.findAll();
-    return CreateResponse(200, { plans });
+    const data = await Plans.findAll();
+    return CreateResponse(200, { data });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }
