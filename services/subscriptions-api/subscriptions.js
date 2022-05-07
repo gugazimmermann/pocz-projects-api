@@ -5,6 +5,7 @@ import DecodedId from "../../libs/decoded-id";
 export const handler = async (event, context) => {
   try {
     const user = await DecodedId(event);
+    if (user instanceof Error) return CreateResponse( user.statusCode, { message: user.message });
     const { Subscriptions } = await database();
     const data = await Subscriptions.findOne({
       where: { userId: user.id },
