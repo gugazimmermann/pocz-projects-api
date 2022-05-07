@@ -1,28 +1,26 @@
 version: '3.6'
 services:
-  iustitia-postgres:
+  postgres:
     image: postgres:12
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - db_data:/var/lib/pocz_project/data
 
-  iustitia-postgres-test:
+  postgres-test:
     image: postgres:12
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}_test
     ports:
-      - "5432:5432"
+      - '5430:5432'
     volumes:
       - db_data_test:/var/lib/pocz_project_test/data
-    ports:
-      - 5430:5432
 
 volumes:
   db_data:

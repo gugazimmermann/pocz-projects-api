@@ -2,11 +2,11 @@
 
 [![Production Build](https://github.com/gugazimmermann/pocz-projects-api/actions/workflows/main.yml/badge.svg)](https://github.com/gugazimmermann/pocz-projects-api/actions/workflows/main.yml)
 
-<https://api.iustitia.io>
+<https://project-api.pocz.io>
 
 ## Tech
 
-Created using Serverless / Node / Sequelize / PostgreSQL
+Created using Serverless / Node / Sequelize / PostgreSQL / Github Actions
 
 ## Sctructure
 
@@ -16,7 +16,6 @@ Created using Serverless / Node / Sequelize / PostgreSQL
 
 # Tests
 
-  `yarn test` - will start a docker container, populate the test database and then run all the tests.
+`yarn test` - will start a docker container, populate the test database and then run all the tests.
 
-  ![Tests Coverage](./readme-imgs/tests.png)
-  
+![Tests Coverage](./readme-imgs/tests.png)

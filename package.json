@@ -14,8 +14,8 @@
   "scripts": {
     "reset:db": "yarn destroy:db && yarn start:db && sleep 5 && yarn migrate:db && yarn seed:db",
     "start:db": "docker-compose --env-file ./.env.development up -d",
-    "stop:db": "docker-compose down",
-    "destroy:db": "docker-compose down && yes | docker volume prune",
+    "stop:db": "docker-compose --env-file ./.env.development down",
+    "destroy:db": "docker-compose --env-file ./.env.development down && yes | docker volume prune",
     "migrate:db": "NODE_ENV=development yarn sequelize-cli db:migrate && NODE_ENV=test yarn sequelize-cli db:migrate",
     "seed:db": "NODE_ENV=development yarn sequelize-cli db:seed:all && NODE_ENV=test yarn sequelize-cli db:seed:all",
     "offline:dev": "NODE_ENV=development sls offline --stage development",
@@ -28,31 +28,31 @@
     "test": "yes | yarn reset:db && NODE_ENV=test serverless-bundle test --colors ----collectCoverage"
   },
   "dependencies": {
+    "@aws-sdk/client-ses": "^3.85.0",
     "bcryptjs": "^2.4.3",
-    "dotenv": "^10.0.0",
-    "dotenv-expand": "^5.1.0",
+    "dotenv": "^16.0.0",
+    "dotenv-expand": "^8.0.3",
+    "jsonwebtoken": "^8.5.1",
     "luxon": "^2.0.2",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.7.0",
+    "serverless": "^3.16.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.3.1",
     "@types/bcryptjs": "^2.4.2",
-    "@types/faker": "^5.5.9",
     "@types/jsonwebtoken": "^8.5.5",
     "@types/luxon": "^2.0.5",
     "@types/pg": "^8.6.1",
     "@types/uuid": "^8.3.1",
-    "aws-sdk": "^2.1013.0",
-    "aws-sdk-mock": "^5.4.0",
-    "faker": "^5.5.3",
     "sequelize-cli": "^6.2.0",
-    "serverless-bundle": "4.3.1",
-    "serverless-domain-manager": "^5.1.5",
-    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-bundle": "^5.3.0",
+    "serverless-domain-manager": "^6.0.3",
+    "serverless-dotenv-plugin": "^4.0.0",
     "serverless-iam-roles-per-function": "^3.2.0",
-    "serverless-offline": "^5.3.3",
+    "serverless-offline": "^8.7.0",
     "serverless-sequelize-migrations": "^1.1.1"
   }
 }

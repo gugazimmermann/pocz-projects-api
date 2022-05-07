@@ -1,11 +1,11 @@
-org: gugazimmermann
-app: pocz-api
+org: gugapocz
+app: api
 service: api
 
 resources:
-  - Description: The main stack for ${env:PROJECT_NAME}
+  Description: The main stack for ${env:PROJECT_NAME}
 
-frameworkVersion: "2"
+frameworkVersion: '2'
 useDotenv: true
 variablesResolutionMode: 20210326
 
@@ -32,10 +32,10 @@ custom:
 
   customDomain:
     domainName: ${env:PROJECT_API_DOMAIN}
-    basePath: ""
+    basePath: ''
     stage: ${self:provider.stage}
     createRoute53Record: true
-    endpointType: "regional"
+    endpointType: 'regional'
     securityPolicy: tls_1_2
 
 provider:
@@ -56,16 +56,16 @@ provider:
       Action:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
-      Resource: "*"
+      Resource: '*'
 
 layers:
   pg:
     path: layers/postgre
-    description: "PostgreSQL Dependencies"
+    description: 'PostgreSQL Dependencies'
   dotenvPgSequelize:
     package:
       artifact: layers/dotenv_pg_sequelize/DotenvPgSequelize.zip
-    description: "dotenv 10.0.0 pg 8.7.1 pg-hstore 2.3.4 sequelize 6.7.0"
+    description: 'dotenv 10.0.0 pg 8.7.1 pg-hstore 2.3.4 sequelize 6.7.0'
 
 functions:
   healthCheck:
@@ -76,8 +76,8 @@ functions:
           method: get
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   # AUTH
   auth-register:
@@ -88,8 +88,8 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth-login:
     handler: services/auth-api/login.handler
@@ -99,8 +99,8 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth-forgot-password:
     handler: services/auth-api/forgot-password.handler
@@ -110,14 +110,14 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - "ses:SendEmail"
-          - "ses:SendRawEmail"
-        Resource: "*"
+          - 'ses:SendEmail'
+          - 'ses:SendRawEmail'
+        Resource: '*'
 
   auth-forgot-password-code:
     handler: services/auth-api/forgot-password-code.handler
@@ -127,8 +127,8 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth-change-password:
     handler: services/auth-api/change-password.handler
@@ -138,8 +138,8 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth-refresh-token:
     handler: services/auth-api/refresh-token.handler
@@ -149,8 +149,8 @@ functions:
           method: post
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth-verify:
     handler: services/auth-api/verify.handler
@@ -167,8 +167,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   # SUBSCRIPTIONS
   subscriptions-subscriptions:
@@ -183,8 +183,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   subscriptions-plans:
     handler: services/subscriptions-api/plans.handler
@@ -194,8 +194,8 @@ functions:
           method: get
           cors: true
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   subscriptions-payments:
     handler: services/subscriptions-api/payments.handler
@@ -209,8 +209,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   subscriptions-credit-cards:
     handler: services/subscriptions-api/credit-cards.handler
@@ -224,8 +224,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   # PLACES
   places-get-all:
@@ -240,8 +240,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-get-one:
     handler: services/places-api/get-one.handler
     events:
@@ -258,8 +258,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-create:
     handler: services/places-api/create.handler
     events:
@@ -272,8 +272,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-delete:
     handler: services/places-api/delete.handler
     events:
@@ -290,8 +290,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-update:
     handler: services/places-api/update.handler
     events:
@@ -308,8 +308,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-count:
     handler: services/places-api/count.handler
     events:
@@ -322,8 +322,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-active:
     handler: services/places-api/active.handler
     events:
@@ -340,8 +340,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-managers:
     handler: services/places-api/managers.handler
     events:
@@ -358,8 +358,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   places-employees:
     handler: services/places-api/employees.handler
     events:
@@ -376,8 +376,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   # PROFILES
   # TODO: Lambda to handle the avatar image
@@ -393,8 +393,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   profiles-update:
     handler: services/profiles-api/update.handler
     events:
@@ -411,8 +411,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   # MEMBERS AND INVITES
   members-invites:
@@ -427,8 +427,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-invites-code:
     handler: services/members-api/invites-code.handler
     events:
@@ -445,8 +445,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-invites-create:
     handler: services/members-api/invites-create.handler
     events:
@@ -459,14 +459,14 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - "ses:SendEmail"
-          - "ses:SendRawEmail"
-        Resource: "*"
+          - 'ses:SendEmail'
+          - 'ses:SendRawEmail'
+        Resource: '*'
   members-invites-send:
     handler: services/members-api/invites-send.handler
     events:
@@ -483,14 +483,14 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
     iamRoleStatements:
       - Effect: Allow
         Action:
-          - "ses:SendEmail"
-          - "ses:SendRawEmail"
-        Resource: "*"
+          - 'ses:SendEmail'
+          - 'ses:SendRawEmail'
+        Resource: '*'
   members-invites-delete:
     handler: services/members-api/invites-delete.handler
     events:
@@ -507,8 +507,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-get-all:
     handler: services/members-api/get-all.handler
     events:
@@ -521,8 +521,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-get-list:
     handler: services/members-api/get-list.handler
     events:
@@ -535,8 +535,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-get-one:
     handler: services/members-api/get-one.handler
     events:
@@ -553,8 +553,8 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
   members-create:
     handler: services/members-api/create.handler
     events:
@@ -567,5 +567,5 @@ functions:
             identitySource: method.request.header.Authorization
             resultTtlInSeconds: 3600
     layers:
-      - { Ref: PgLambdaLayer }
-      - { Ref: DotenvPgSequelizeLambdaLayer }
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
