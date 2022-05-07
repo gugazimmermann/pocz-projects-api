@@ -1,26 +1,17 @@
 import jwt from "jsonwebtoken";
 import config from "../jwt-config";
+import { handler } from "../../services/auth-api/verify";
 
-export function expiredToken() {
-  const userId = "fd6bc51e-195e-4433-b404-8a9fdfa0f632";
-  const token = jwt.sign({ id: userId }, config.jwtSecret, {
-    expiresIn: "-10s",
-  });
-  return token;
-}
+const headers = (authorizationToken) => ({ authorizationToken, methodArn: "b41b1045-f2a0-40b6-8be2-7381e392b94a" });
 
-export function userNotFoundToken() {
-  const userId = "f9d94cdb-3700-4a91-821b-e5f9246a99c4";
-  const token = jwt.sign({ id: userId }, config.jwtSecret, {
-    expiresIn: config.jwtExpiration,
-  });
-  return token;
-}
+export const userNotFoundToken = async () => (await handler(headers(
+  jwt.sign({ id: "f9d94cdb-3700-4a91-821b-e5f9246a99c4" }, config.jwtSecret, { expiresIn: config.jwtExpiration })
+)));
 
-export function validToken() {
-  const userId = "fd6bc51e-195e-4433-b404-8a9fdfa0f632";
-  const token = jwt.sign({ id: userId }, config.jwtSecret, {
-    expiresIn: config.jwtExpiration,
-  });
-  return token;
-}
+export const expiredToken = async () => (await handler(headers(
+  jwt.sign({ id: "fd6bc51e-195e-4433-b404-8a9fdfa0f632" }, config.jwtSecret, { expiresIn: "-10s" })
+)));
+
+export const validToken = async () => (await handler(headers(
+  jwt.sign({ id: "fd6bc51e-195e-4433-b404-8a9fdfa0f632" }, config.jwtSecret, { expiresIn: config.jwtExpiration })
+)));

@@ -57,12 +57,7 @@ const databaseConfig = {
 
 const config = databaseConfig[env];
 
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
-);
+const sequelize = new Sequelize(config.database, config.username, config.password, config );
 
 const db = {
   Sequelize: sequelize,
@@ -95,72 +90,24 @@ db.Users.hasMany(db.CreditCards);
 db.CreditCards.hasMany(db.Payments);
 db.Users.hasMany(db.Payments);
 
-db.Users.belongsToMany(db.Places, {
-  as: "placeManagers",
-  through: { model: "place_managers" },
-});
-db.Places.belongsToMany(db.Users, {
-  as: "managersPlace",
-  through: { model: "place_managers" },
-});
-db.Users.belongsToMany(db.Places, {
-  as: "placeEmployees",
-  through: { model: "place_employees" },
-});
-db.Places.belongsToMany(db.Users, {
-  as: "employeesPlace",
-  through: { model: "place_employees" },
-});
+db.Users.belongsToMany(db.Places, { as: "placeManagers", through: { model: "place_managers" }});
+db.Places.belongsToMany(db.Users, { as: "managersPlace", through: { model: "place_managers" }});
+db.Users.belongsToMany(db.Places, { as: "placeEmployees", through: { model: "place_employees" }});
+db.Places.belongsToMany(db.Users, { as: "employeesPlace", through: { model: "place_employees" }});
 
-db.Persons.belongsToMany(db.Users, {
-  as: "userClients",
-  through: { model: "user_clients" },
-});
-db.Users.belongsToMany(db.Persons, {
-  as: "clientsUser",
-  through: { model: "user_clients" },
-});
-db.Persons.belongsToMany(db.Users, {
-  as: "userSupliers",
-  through: { model: "user_supliers" },
-});
-db.Users.belongsToMany(db.Persons, {
-  as: "supliersUser",
-  through: { model: "user_supliers" },
-});
-db.Persons.belongsToMany(db.Users, {
-  as: "userContacts",
-  through: { model: "user_contacts" },
-});
-db.Users.belongsToMany(db.Persons, {
-  as: "contactsUser",
-  through: { model: "user_contacts" },
-});
+db.Persons.belongsToMany(db.Users, { as: "userClients", through: { model: "user_clients" }});
+db.Users.belongsToMany(db.Persons, { as: "clientsUser", through: { model: "user_clients" }});
+db.Persons.belongsToMany(db.Users, { as: "userSupliers", through: { model: "user_supliers" }});
+db.Users.belongsToMany(db.Persons, { as: "supliersUser", through: { model: "user_supliers" }});
+db.Persons.belongsToMany(db.Users, { as: "userContacts", through: { model: "user_contacts" }});
+db.Users.belongsToMany(db.Persons, { as: "contactsUser", through: { model: "user_contacts" }});
 
-db.Persons.belongsToMany(db.Places, {
-  as: "placeClients",
-  through: { model: "place_clients" },
-});
-db.Places.belongsToMany(db.Persons, {
-  as: "clientsPlace",
-  through: { model: "place_clients" },
-});
-db.Persons.belongsToMany(db.Places, {
-  as: "placeSupliers",
-  through: { model: "place_supliers" },
-});
-db.Places.belongsToMany(db.Persons, {
-  as: "supliersPlace",
-  through: { model: "place_supliers" },
-});
-db.Persons.belongsToMany(db.Places, {
-  as: "placeContacts",
-  through: { model: "place_contacts" },
-});
-db.Places.belongsToMany(db.Persons, {
-  as: "contactsPlace",
-  through: { model: "place_contacts" },
-});
+db.Persons.belongsToMany(db.Places, { as: "placeClients", through: { model: "place_clients" }});
+db.Places.belongsToMany(db.Persons, { as: "clientsPlace", through: { model: "place_clients" }});
+db.Persons.belongsToMany(db.Places, { as: "placeSupliers", through: { model: "place_supliers" }});
+db.Places.belongsToMany(db.Persons, { as: "supliersPlace", through: { model: "place_supliers" }});
+db.Persons.belongsToMany(db.Places, { as: "placeContacts", through: { model: "place_contacts" }});
+db.Places.belongsToMany(db.Persons, { as: "contactsPlace", through: { model: "place_contacts" }});
 
 db.Persons.belongsTo(db.Companies);
 db.Persons.hasMany(db.Attachments);
@@ -168,12 +115,8 @@ db.Persons.hasMany(db.Notes);
 
 db.Users.hasMany(db.Events);
 db.Places.hasMany(db.Events);
-db.Events.belongsToMany(db.Persons, {
-  through: { model: "event_contacts", paranoid: true },
-});
-db.Persons.belongsToMany(db.Events, {
-  through: { model: "event_contacts", paranoid: true },
-});
+db.Events.belongsToMany(db.Persons, { through: { model: "event_contacts", paranoid: true }});
+db.Persons.belongsToMany(db.Events, { through: { model: "event_contacts", paranoid: true }});
 
 const connection = {};
 
@@ -183,9 +126,7 @@ export async function close() {
 }
 
 async function database() {
-  if (connection.isConnected) {
-    return db;
-  }
+  if (connection.isConnected) return db;
   await sequelize.authenticate();
   connection.isConnected = true;
   return db;

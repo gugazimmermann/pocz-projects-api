@@ -7,8 +7,7 @@ export const handler = async (event, context) => {
   try {
     const { ForgotPassword } = await database();
     const forgotPassword = await ForgotPassword.findOne({ where: { codeurl } });
-    if (!forgotPassword)
-      return CreateResponse(404, { message: "Código não encontrado!" });
+    if (!forgotPassword) return CreateResponse(404, { message: "Código não encontrado!" });
     return CreateResponse(200, { code: forgotPassword.code });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });

@@ -2,29 +2,17 @@ import jwt from "jsonwebtoken";
 import config from "../../libs/jwt-config";
 
 function generateAuthResponse(principalId, effect, methodArn) {
-  const policyDocument = generatePolicyDocument(effect, methodArn);
-  return { principalId, policyDocument };
+  return { principalId, policyDocument: generatePolicyDocument(effect, methodArn) };
 }
 
 function generatePolicyDocument(effect, methodArn) {
   if (!methodArn) return null;
-  const policyDocument = {
-    Version: "2012-10-17",
-    Statement: [
-      {
-        Action: "execute-api:Invoke",
-        Effect: effect,
-        Resource: "*",
-      },
-    ],
-  };
-  return policyDocument;
+  return { Version: "2012-10-17", Statement: [ { Action: "execute-api:Invoke", Effect: effect, Resource: "*" } ] };
 }
 
-export const handler = async (event, context) => {
+export const handler = async (event) => {
   const { authorizationToken, methodArn } = event;
-  if (!authorizationToken || !methodArn)
-    return generateAuthResponse(undefined, "Deny", methodArn);
+  if (!authorizationToken || !methodArn) return generateAuthResponse(undefined, "Deny", methodArn);
   const token = authorizationToken.replace("Bearer ", "");
   if (!token) return generateAuthResponse(undefined, "Deny", methodArn);
   try {

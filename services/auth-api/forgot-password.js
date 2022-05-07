@@ -3,19 +3,16 @@ import { v4 as uuidv4 } from "uuid";
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 import { validateEmail } from "../../libs/utils";
-import sendForgotPasswordEmail from "../../libs/emails/forgot-password";
+import { sendForgotPasswordEmail } from "../../libs/emails/forgot-password";
 
 export const handler = async (event, context) => {
   const { email } = JSON.parse(event?.body);
-  if (!email || !validateEmail(email))
-    return CreateResponse(400, { message: "Dados inválidos!" });
+  if (!email || !validateEmail(email)) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Users, ForgotPassword } = await database();
     const user = await Users.findOne({ where: { email } });
-    if (!user)
-      return CreateResponse(404, { message: "Usuário não encontrado!" });
-    if (!user.active)
-      return CreateResponse(401, { message: "Cadastro Inativo!" });
+    if (!user) return CreateResponse(404, { message: "Usuário não encontrado!" });
+    if (!user.active)  return CreateResponse(401, { message: "Cadastro Inativo!" });
     const expiryDate = DateTime.now().plus({ hours: 1 });
     const forgotPasswordParams = {
       email: email,

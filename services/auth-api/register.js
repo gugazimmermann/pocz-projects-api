@@ -6,8 +6,7 @@ import { createUser, createUserPayment } from "./utils";
 
 export const handler = async (event, context) => {
   const { name, email, password, planId, cardInfo } = JSON.parse(event?.body);
-  if (!name || !email || !validateEmail(email) || !password || !planId)
-    return CreateResponse(400, { message: "Dados inválidos!" });
+  if (!name || !email || !validateEmail(email) || !password || !planId) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Sequelize, Plans, Users } = await database();
     await Sequelize.transaction(async () => {

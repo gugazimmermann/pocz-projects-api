@@ -1,7 +1,7 @@
-import aws from "aws-sdk";
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 import CreateResponse from "../response";
 
-const ses = new aws.SES({ region: "us-east-1" });
+const sesClient = new SESClient({ region: "us-east-1" });
 
 export async function sendForgotPasswordEmail({ email, date, code, codeUrl }) {
   const getTime = (date) => {
@@ -24,23 +24,12 @@ export async function sendForgotPasswordEmail({ email, date, code, codeUrl }) {
   )}</strong> de <strong>${getDate(date)}</strong>.</p>
   `;
   try {
-    return await ses
-      .sendEmail({
-        Destination: {
-          ToAddresses: [email],
-        },
-        Message: {
-          Body: {
-            Html: { Data: message },
-          },
-          Subject: { Data: subject },
-        },
-        Source: "no-reply@iustitia.io",
-      })
-      .promise();
+    return await sesClient.send(new SendEmailCommand({
+      Destination: { ToAddresses: [email] },
+      Message: { Body: { Html: { Data: message } }, Subject: { Data: subject } },
+      Source: "no-reply@iustitia.io",
+    }));
   } catch (err) {
     return CreateResponse(500, { message: err.message });
   }
 }
-
-export default sendForgotPasswordEmail;
