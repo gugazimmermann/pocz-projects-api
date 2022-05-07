@@ -34,12 +34,12 @@ describe("Auth API - Me", () => {
 
   test("Should fail if database error", async () => {
     const { Users } = await database();
-    Users.findOne = jest.fn(() => Promise.reject(new Error("DB ERROR!")));
+    const mock = jest.spyOn(Users, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
     const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
     const res = await me.handler(event);
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(401);
     expect(body.message).toBe("Não Autorizado!");
-    jest.clearAllMocks();
+    mock.mockRestore();
   });
 });

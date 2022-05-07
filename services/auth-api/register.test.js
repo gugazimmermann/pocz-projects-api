@@ -1,5 +1,6 @@
 import faker from "@faker-js/faker";
-import { close } from "../../libs/connection";
+import database, { close } from "../../libs/connection";
+import CreateError from "../../libs/error";
 import * as register from "./register";
 faker.locale = "pt_BR";
 
@@ -14,17 +15,6 @@ describe("Auth API - Register", () => {
     };
     let res = await register.handler({ body: JSON.stringify(user) });
     let body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(400);
-    expect(body.message).toBe("Dados inválidos!");
-
-    user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      planId: "babeaa81-e4f0-4528-91df-1d48d273466c",
-    };
-    res = await register.handler({ body: JSON.stringify(user) });
-    body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(400);
     expect(body.message).toBe("Dados inválidos!");
 
@@ -127,5 +117,21 @@ describe("Auth API - Register", () => {
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(201);
     expect(body.message).toBe("Usuário cadastrado com sucesso!");
+  });
+
+  test("Should return database error", async () => {
+    const { Plans } = await database();
+    const mock = jest.spyOn(Plans, 'findOne').mockRejectedValueOnce(CreateError(500, "DB ERROR!"));
+    const user = {
+      name: faker.name.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      planId: "269a27f2-6006-445d-af03-b9c524556c9a",
+    };
+    const res = await register.handler({ body: JSON.stringify(user) });
+    const body = JSON.parse(res.body);
+    expect(res.statusCode).toEqual(500);
+    expect(body).toBe("DB ERROR!");
+    mock.mockRestore();
   });
 });

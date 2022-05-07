@@ -5,15 +5,16 @@ import * as email from "../../libs/emails/forgot-password";
 faker.locale = "pt_BR";
 
 const validEmail = "gugazimmermann@gmail.com";
+let mock;
 
 describe("Auth API - Forgot Password", () => {
   beforeEach(() => { 
-    email.sendForgotPasswordEmail = jest.fn(() => Promise.resolve({ 
+    mock = jest.spyOn(email, 'sendForgotPasswordEmail').mockResolvedValueOnce({ 
       ResponseMetadata: { RequestId: "eda54736" }, MessageId: "0000000"
-    }));
+    });
   });
-  afterEach(() => { jest.clearAllMocks() });
-  afterAll(() => { close() });
+  afterEach(() => { mock.mockRestore(); });
+  afterAll(() => { mock.mockRestore(); });
 
   test("Should fail without email or invalid email", async () => {
     let event = { body: JSON.stringify({}) };
@@ -56,12 +57,12 @@ describe("Auth API - Forgot Password", () => {
 
   test("Should return database error", async () => {
     const { Users } = await database();
-    Users.findOne = jest.fn(() => Promise.reject(new Error("DB ERROR!")));
+    const mock = jest.spyOn(Users, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
     const event = { body: JSON.stringify({ email: validEmail }) };
     const res = await forgotPassword.handler(event);
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(500);
     expect(body.message).toBe("DB ERROR!");
-    jest.clearAllMocks();
+    mock.mockRestore();
   });
 });

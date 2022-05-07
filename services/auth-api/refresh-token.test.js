@@ -38,12 +38,12 @@ describe("Auth API - Refresh Token", () => {
 
   test("Should return database error", async () => {
     const { RefreshToken } = await database();
-    RefreshToken.findOne = jest.fn(() => Promise.reject(new Error("DB ERROR!")));
+    const mock = jest.spyOn(RefreshToken, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
     const event = { body: JSON.stringify({ refreshToken: "fa5adb0e-21ec-4ab1-b717-6d1e2a573e17" }) };
     const res = await refreshToken.handler(event);
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(500);
     expect(body.message).toBe("DB ERROR!");
-    jest.clearAllMocks();
+    mock.mockRestore();
   });
 });

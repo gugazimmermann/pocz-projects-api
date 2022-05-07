@@ -45,7 +45,7 @@ export async function createUserPayment({ userId, cardInfo, transactionAmount, s
     status: "Paid",
     paidDate: new Date(),
     subscriptionId: subscriptionId,
-    creditcardId: creditcard.id,
+    creditCardId: creditcard.id,
     userId: userId,
   });
 }

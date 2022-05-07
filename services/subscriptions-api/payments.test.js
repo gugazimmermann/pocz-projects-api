@@ -18,17 +18,17 @@ describe("Subscriptions API - Payments", () => {
     const res = await payments.handler(event);
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(200);
-    expect(body.payments.length).toBe(3);
+    expect(body.data.length).toBe(3);
   });
 
   test("Should fail if database error", async () => {
     const { Payments } = await database();
-    Payments.findAll = jest.fn(() => Promise.reject(new Error("DB ERROR!")));
+    const mock = jest.spyOn(Payments, 'findAll').mockRejectedValueOnce(new Error("DB ERROR!"));
     const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
     const res = await payments.handler(event);
     const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(401);
-    expect(body.message).toBe("Não Autorizado!");
-    jest.clearAllMocks();
+    expect(res.statusCode).toEqual(500);
+    expect(body.message).toBe("DB ERROR!");
+    mock.mockRestore();
   });
 });

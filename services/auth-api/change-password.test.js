@@ -54,12 +54,12 @@ describe("Auth API - Change Password", () => {
 
   test("Should return database error", async () => {
     const { ForgotPassword } = await database();
-    ForgotPassword.findOne = jest.fn(() => Promise.reject(new Error("DB ERROR!")));
+    const mock = jest.spyOn(ForgotPassword, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
     const event = { body: JSON.stringify({ code: "1234", password: "12345" }) };
     const res = await changePassword.handler(event);
     const body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(500);
     expect(body.message).toBe("DB ERROR!");
-    jest.clearAllMocks();
+    mock.mockRestore();
   });
 });

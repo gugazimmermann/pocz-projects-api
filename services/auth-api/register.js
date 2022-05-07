@@ -32,7 +32,7 @@ export const handler = async (event, context) => {
       });
       if (userPlan.transactionAmount !== 0) {
         if (!cardInfo) throw CreateError(400, "Dados inválidos!");
-        await createUserPayment({
+         await createUserPayment({
           userId: user.id,
           cardInfo: {
             name: cardInfo.name,
@@ -50,6 +50,6 @@ export const handler = async (event, context) => {
     });
     return CreateResponse(201, { message: "Usuário cadastrado com sucesso!" });
   } catch (err) {
-    return CreateResponse(err.statusCode, err.message);
+    return CreateResponse(err.statusCode || 500, err.message);
   }
 };
