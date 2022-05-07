@@ -24,6 +24,14 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: "8285376d-960a-4315-8f25-4992ba7790f3",
+          token: "147dd632-e372-43ce-bc9e-e5bc37f2cbfb",
+          expiryDate: expiryDate.toJSDate(),
+          userId: "eb07ecc2-fd14-480a-a9a8-354b1918ef93",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

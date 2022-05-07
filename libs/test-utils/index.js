@@ -12,6 +12,6 @@ export const expiredToken = async () => (await handler(headers(
   jwt.sign({ id: "fd6bc51e-195e-4433-b404-8a9fdfa0f632" }, config.jwtSecret, { expiresIn: "-10s" })
 )));
 
-export const validToken = async () => (await handler(headers(
-  jwt.sign({ id: "fd6bc51e-195e-4433-b404-8a9fdfa0f632" }, config.jwtSecret, { expiresIn: config.jwtExpiration })
+export const validToken = async (userID) => (await handler(headers(
+  jwt.sign({ id: userID ? userID : "fd6bc51e-195e-4433-b404-8a9fdfa0f632" }, config.jwtSecret, { expiresIn: config.jwtExpiration })
 )));
