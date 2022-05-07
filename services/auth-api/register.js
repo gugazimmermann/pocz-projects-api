@@ -30,7 +30,6 @@ export const handler = async (event, context) => {
           planId: userPlan.id,
         },
       });
-
       if (userPlan.transactionAmount !== 0) {
         if (!cardInfo) throw CreateError(400, "Dados inválidos!");
         await createUserPayment({

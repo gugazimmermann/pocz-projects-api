@@ -1,12 +1,11 @@
-import faker from "faker";
-import { close } from "../../../libs/connection";
-import * as register from "../register";
+import faker from "@faker-js/faker";
+import { close } from "../../libs/connection";
+import * as register from "./register";
 faker.locale = "pt_BR";
 
 describe("Auth API - Register", () => {
-  afterAll(() => {
-    close();
-  });
+  afterAll(() => { close() });
+
   test("Should fail without name, email, password, planId or invalid email", async () => {
     let user = {
       name: faker.name.firstName(),
@@ -15,6 +14,17 @@ describe("Auth API - Register", () => {
     };
     let res = await register.handler({ body: JSON.stringify(user) });
     let body = JSON.parse(res.body);
+    expect(res.statusCode).toEqual(400);
+    expect(body.message).toBe("Dados inválidos!");
+
+    user = {
+      name: faker.name.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      planId: "babeaa81-e4f0-4528-91df-1d48d273466c",
+    };
+    res = await register.handler({ body: JSON.stringify(user) });
+    body = JSON.parse(res.body);
     expect(res.statusCode).toEqual(400);
     expect(body.message).toBe("Dados inválidos!");
 
@@ -60,19 +70,6 @@ describe("Auth API - Register", () => {
     expect(body.message).toBe("Dados inválidos!");
   });
 
-  test("Should fail transactionAmount > 0 and no card Info", async () => {
-    const user = {
-      name: faker.name.firstName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      planId: "ea4a6bb7-fa4c-4003-bfa7-350b89ccf51f",
-    };
-    const res = await register.handler({ body: JSON.stringify(user) });
-    const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(400);
-    expect(body).toBe("Dados inválidos!");
-  });
-
   test("Should fail if email already exists", async () => {
     const user = {
       name: faker.name.firstName(),
@@ -86,7 +83,20 @@ describe("Auth API - Register", () => {
     expect(body).toBe("Email já está cadastrado!");
   });
 
-  test("Should create user", async () => {
+  test("Should fail transactionAmount > 0 and no card Info", async () => {
+    const user = {
+      name: faker.name.firstName(),
+      email: faker.internet.email(),
+      password: faker.internet.password(),
+      planId: "ea4a6bb7-fa4c-4003-bfa7-350b89ccf51f",
+    };
+    const res = await register.handler({ body: JSON.stringify(user) });
+    const body = JSON.parse(res.body);
+    expect(res.statusCode).toEqual(400);
+    expect(body).toBe("Dados inválidos!");
+  });
+
+  test("Should create user with free plan and without card info", async () => {
     const user = {
       name: faker.name.firstName(),
       email: faker.internet.email(),
@@ -99,7 +109,7 @@ describe("Auth API - Register", () => {
     expect(body.message).toBe("Usuário cadastrado com sucesso!");
   });
 
-  test("Should create user", async () => {
+  test("Should create user with paid plan and with card info", async () => {
     const user = {
       name: faker.name.firstName(),
       email: faker.internet.email(),

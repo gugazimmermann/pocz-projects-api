@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import database from "../../libs/connection";
 
-export async function createUser({  name, email, password, tenant, roleName, subscription }) {
+export async function createUser({ name, email, password, tenant, roleName, subscription }) {
   const { Users, Roles, Profiles, Subscriptions } = await database();
   const userData = { email: email, password: bcrypt.hashSync(password, 8), active: true };
   if (tenant) userData.tenant = tenant;
@@ -40,7 +40,7 @@ export async function createUserPayment({ userId, cardInfo, transactionAmount, s
     status: true,
     userId: userId,
   });
-  const payment = await Payments.create({
+  await Payments.create({
     transactionAmount: transactionAmount,
     status: "Paid",
     paidDate: new Date(),
@@ -48,5 +48,4 @@ export async function createUserPayment({ userId, cardInfo, transactionAmount, s
     creditcardId: creditcard.id,
     userId: userId,
   });
-  return { creditcard, payment };
 }
