@@ -14,7 +14,7 @@ export async function sendInviteEmail({ name, email, code, tenantId, user }) {
   <p>Acesse <a href="${URL}">${URL}</a> e coloque o c&oacute;digo abaixo para criar sua nova senha.</p>
   <h3>C&oacute;digo: ${CODE}</h3>
   <p>Ou se preferir acesse <a href="${URL}/${code}">${URL}/${code}</a> e n&atilde;o &eacute; necess&aacute;rio digitar o c&oacute;digo.</p>
-  `
+  `;
   try {
     return await sesClient.send(new SendEmailCommand({
       Destination: { ToAddresses: [email] },
