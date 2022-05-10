@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 import { Op } from "sequelize";
 import database from "../../libs/connection";
 

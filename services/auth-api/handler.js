@@ -1,8 +1,8 @@
 import CreateResponse from "../../libs/response";
 import DecodedId from "../../libs/decoded-id";
-import { 
-  LambdaTypes, 
-  login, 
+import {
+  LambdaTypes,
+  login,
   changePassword,
   forgotPasswordCode,
   forgotPassword,

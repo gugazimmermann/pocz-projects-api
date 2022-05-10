@@ -1,4 +1,4 @@
-export const LambdaTypes = { 
+export const LambdaTypes = {
   Login: 'Login',
   ChangePassword: 'ChangePassword',
   ForgotPasswordCode: 'ForgotPasswordCode',

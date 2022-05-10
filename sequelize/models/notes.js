@@ -10,7 +10,7 @@ export default (sequelize, DataTypes) => {
     {
       title: DataTypes.TEXT,
       content: DataTypes.TEXT,
-      personId: DataTypes.UUID, 
+      personId: DataTypes.UUID,
     },
     {
       sequelize,

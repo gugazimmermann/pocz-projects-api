@@ -1,4 +1,4 @@
-export const LambdaTypes = { 
+export const LambdaTypes = {
   Get: 'Get',
   Update: 'Update'
 };

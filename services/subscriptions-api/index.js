@@ -1,4 +1,4 @@
-export const LambdaTypes = { 
+export const LambdaTypes = {
   CreditCards: 'CreditCards',
   Payments: 'Payments',
   Plans: 'Plans',
