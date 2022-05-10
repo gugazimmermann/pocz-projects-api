@@ -3,14 +3,8 @@ import config from "../../libs/jwt-config";
 import * as verify from "./verify";
 
 const userId = "fd6bc51e-195e-4433-b404-8a9fdfa0f632";
-const deny = { 
-  Version: "2012-10-17", 
-  Statement: [{ Action: "execute-api:Invoke", Effect: "Deny", Resource: "*" }]
-};
-const allow = {
-  Version: "2012-10-17",
-  Statement: [{ Action: "execute-api:Invoke", Effect: "Allow", Resource: "*" }],
-};
+const deny = { Version: "2012-10-17", Statement: [{ Action: "execute-api:Invoke", Effect: "Deny", Resource: "*" }] };
+const allow = { Version: "2012-10-17", Statement: [{ Action: "execute-api:Invoke", Effect: "Allow", Resource: "*" }] };
 
 describe("Auth API - Verify", () => {
   test("Should fail without authorizationToken, methodArn, token or wrong token", async () => {

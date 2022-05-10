@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken";
 import config from "../../libs/jwt-config";
 
-function generateAuthResponse(principalId, effect, methodArn) {
-  return { principalId, policyDocument: generatePolicyDocument(effect, methodArn) };
-}
-
 function generatePolicyDocument(effect, methodArn) {
   if (!methodArn) return null;
   return { Version: "2012-10-17", Statement: [ { Action: "execute-api:Invoke", Effect: effect, Resource: "*" } ] };
+}
+
+function generateAuthResponse(principalId, effect, methodArn) {
+  return { principalId, policyDocument: generatePolicyDocument(effect, methodArn) };
 }
 
 export const handler = async (event) => {

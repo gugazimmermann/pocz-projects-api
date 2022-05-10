@@ -1,45 +1,33 @@
 import { close } from "../../libs/connection";
-import { userNotFoundToken, validToken } from "../../libs/test-utils";
-import * as utils from "./utils";
-import * as get from "./get";
+import { Tokens, createEvent } from "../../libs/test-utils";
+import { LambdaTypes, handler } from "./index";
+import * as utils from "../shared/profiles-utils";
+
+const validId = 'fd6bc51e-195e-4433-b404-8a9fdfa0f632';
 
 describe("Profiles API - Get", () => {
   afterAll(() => { close() });
 
-  test("Should fail with user not found", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await userNotFoundToken()).principalId } }}
-    const res = await get.handler(event);
-    const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Usuário não encontrado!");
-  });
-
-  test("Should pass with valid token and user", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await get.handler(event);
-    const body = JSON.parse(res.body);
+  test("Should success", async () => {
+    const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(body.data.name).toBe('Guga');
+    expect(JSON.parse(res.body).data.id).toBe(validId);
   });
 
-  test("Should not find user profile", async () => {
-    const mock = jest.spyOn(utils, 'findOne').mockResolvedValueOnce();
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await get.handler(event);
-    const body = JSON.parse(res.body);
+  test("Should fail user not found", async () => {
+    const mock = jest.spyOn(utils, 'findOne').mockResolvedValueOnce(null);
+    const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Registro não encontrado!");
+    expect(JSON.parse(res.body).message).toBe("Registro não encontrado!");
     mock.mockRestore();
   });
 
-  test("Should fail if database error", async () => {
+  test("Should return database error", async () => {
     const mock = jest.spyOn(utils, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await get.handler(event);
-    console.log(res);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(500);
-    expect(body.message).toBe("DB ERROR!");
+    expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();
   });
+
 });

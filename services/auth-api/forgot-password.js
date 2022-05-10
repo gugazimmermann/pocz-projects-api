@@ -5,8 +5,7 @@ import CreateResponse from "../../libs/response";
 import { validateEmail } from "../../libs/utils";
 import { sendForgotPasswordEmail } from "../../libs/emails/forgot-password";
 
-export const handler = async (event, context) => {
-  const { email } = JSON.parse(event?.body);
+export const forgotPassword = async ({ email }) => {
   if (!email || !validateEmail(email)) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Users, ForgotPassword } = await database();
@@ -27,10 +26,7 @@ export const handler = async (event, context) => {
       expiryDate: expiryDate.toJSDate(),
     });
     await sendForgotPasswordEmail(forgotPasswordParams);
-    return CreateResponse(200, {
-      email: forgotPasswordParams.email,
-      date: expiryDate.toFormat("dd/MM/yyyy HH:mm:ss"),
-    });
+    return CreateResponse(200, { email: forgotPasswordParams.email,  date: expiryDate.toFormat("dd/MM/yyyy HH:mm:ss") });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

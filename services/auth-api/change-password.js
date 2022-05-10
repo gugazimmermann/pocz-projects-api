@@ -3,8 +3,7 @@ import bcrypt from "bcryptjs";
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const handler = async (event, context) => {
-  const { code, password } = JSON.parse(event?.body);
+export const changePassword = async ({ code, password }) => {
   if (!code || !password) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Users, ForgotPassword } = await database();

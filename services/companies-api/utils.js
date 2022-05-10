@@ -28,12 +28,9 @@ export async function findAll(tenantId) {
 export async function findOne(id, tenantId) {
   const { Companies, Persons } = await database();
   const data = await Companies.findOne({ where: { id, tenantId } });
-  if (!data)
-    return CreateResponse(404, { message: "Registro não encontrado!" });
+  if (!data) return null;
   const contacts = await Persons.findAll({ where: { companyId: data.id } });
   data.contacts = [];
-  contacts.forEach((c) =>
-    data.contacts.push({ id: c.id, name: c.name, position: c.position })
-  );
+  contacts.forEach((c) => data.contacts.push({ id: c.id, name: c.name, position: c.position }));
   return data;
 }

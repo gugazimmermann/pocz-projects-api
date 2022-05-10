@@ -6,8 +6,7 @@ import CreateResponse from "../../libs/response";
 import config from "../../libs/jwt-config";
 import { validateEmail } from "../../libs/utils";
 
-export const handler = async (event, context) => {
-  const { email, password } = JSON.parse(event?.body);
+export const login = async ({ email, password }) => {
   if (!email || !validateEmail(email) || !password) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Users, RefreshToken } = await database();

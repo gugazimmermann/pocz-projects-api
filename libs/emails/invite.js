@@ -1,7 +1,6 @@
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { SendEmailCommand } from "@aws-sdk/client-ses";
+import { sesClient } from "./libs/sesClient";
 import CreateResponse from "../response";
-
-const sesClient = new SESClient({ region: "us-east-1" });
 
 export async function sendInviteEmail({ name, email, code, tenantId, user }) {
   const PROJECT_NAME = process.env.PROJECT_NAME;
@@ -26,5 +25,3 @@ export async function sendInviteEmail({ name, email, code, tenantId, user }) {
     return CreateResponse(500, { message: err.message });
   }
 }
-
-export default sendInviteEmail;

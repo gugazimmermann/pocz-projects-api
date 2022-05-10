@@ -30,84 +30,32 @@ export function resultToData(resultData) {
     city: resultData.city,
     state: resultData.state,
     active: resultData.active,
-    managersPlace:
-      resultData.managersPlace &&
-      resultData.managersPlace.map((m) => userToData(m)),
-    employeesPlace:
-      resultData.employeesPlace &&
-      resultData.employeesPlace.map((u) => userToData(u)),
-    clientsPlace:
-      resultData.clientsPlace &&
-      resultData.clientsPlace.map((p) => personToData(p)),
-    supliersPlace:
-      resultData.supliersPlace &&
-      resultData.supliersPlace.map((p) => personToData(p)),
-    contactsPlace:
-      resultData.contactsPlace &&
-      resultData.contactsPlace.map((p) => personToData(p)),
+    managersPlace: resultData.managersPlace && resultData.managersPlace.map((m) => userToData(m)),
+    employeesPlace: resultData.employeesPlace && resultData.employeesPlace.map((u) => userToData(u)),
+    clientsPlace: resultData.clientsPlace && resultData.clientsPlace.map((p) => personToData(p)),
+    supliersPlace: resultData.supliersPlace && resultData.supliersPlace.map((p) => personToData(p)),
+    contactsPlace: resultData.contactsPlace && resultData.contactsPlace.map((p) => personToData(p)),
   };
 }
 
 function placesInclude(Profiles) {
-  const include = [
-    {
-      association: "managersPlace",
-      attributes: ["id"],
-      where: { active: true },
-      required: false,
-      include: [
-        {
-          model: Profiles,
-          attributes: ["id", "avatar", "name"],
-        },
-      ],
-    },
-    {
-      association: "employeesPlace",
-      attributes: ["id"],
-      where: { active: true },
-      required: false,
-      include: [
-        {
-          model: Profiles,
-          attributes: ["id", "avatar", "name"],
-        },
-      ],
-    },
-    {
-      association: "clientsPlace",
-      attributes: ["id", "avatar", "name"],
-    },
-    {
-      association: "supliersPlace",
-      attributes: ["id", "avatar", "name"],
-    },
-    {
-      association: "contactsPlace",
-      attributes: ["id", "avatar", "name"],
-    },
+  return [
+    { association: "managersPlace", attributes: ["id"], where: { active: true }, required: false, include: [{ model: Profiles, attributes: ["id", "avatar", "name"]}] },
+    { association: "employeesPlace", attributes: ["id"], where: { active: true }, required: false, include: [{ model: Profiles, attributes: ["id", "avatar", "name"] }] },
+    { association: "clientsPlace", attributes: ["id", "avatar", "name"] },
+    { association: "supliersPlace", attributes: ["id", "avatar", "name"] },
+    { association: "contactsPlace", attributes: ["id", "avatar", "name"] },
   ];
-  return include;
 }
 
 export async function findAll(tenantId) {
   const { Places, Profiles } = await database();
   const include = placesInclude(Profiles);
-  const data = await Places.findAll({
-    where: { tenantId },
-    attributes: ["id", "name", "city", "state", "active"],
-    include,
-  });
-  return data;
+  return await Places.findAll({ where: { tenantId }, attributes: ["id", "name", "city", "state", "active"], include });
 }
 
 export async function findOne(id, tenantId) {
   const { Places, Profiles } = await database();
   const include = placesInclude(Profiles);
-  const data = await Places.findOne({
-    where: { id, tenantId },
-    attributes: ["id", "name", "city", "state", "active"],
-    include,
-  });
-  return data;
+  return await Places.findOne({ where: { id, tenantId }, attributes: ["id", "name", "city", "state", "active"], include });
 }

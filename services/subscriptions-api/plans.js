@@ -1,7 +1,7 @@
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const handler = async (event, context) => {
+export const plans = async () => {
   try {
     const { Plans } = await database();
     const data = await Plans.findAll();

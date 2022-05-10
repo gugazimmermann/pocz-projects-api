@@ -23,6 +23,18 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          personId: "4e8c09c1-8f7b-417c-8ac4-69ed3e3f3feb",
+          placeId: "099330a1-ddb2-402b-8560-a95848b69033",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          personId: "b5bb4789-e609-4923-918b-2207aa61e8ea",
+          placeId: "099330a1-ddb2-402b-8560-a95848b69033",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

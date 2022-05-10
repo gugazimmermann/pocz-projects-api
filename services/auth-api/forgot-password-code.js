@@ -1,8 +1,7 @@
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const handler = async (event, context) => {
-  const { codeurl } = JSON.parse(event?.body);
+export const forgotPasswordCode = async ({ codeurl }) => {
   if (!codeurl) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { ForgotPassword } = await database();

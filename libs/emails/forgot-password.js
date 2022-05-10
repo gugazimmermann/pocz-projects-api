@@ -1,7 +1,6 @@
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+import { SendEmailCommand } from "@aws-sdk/client-ses";
+import { sesClient } from "./libs/sesClient";
 import CreateResponse from "../response";
-
-const sesClient = new SESClient({ region: "us-east-1" });
 
 export async function sendForgotPasswordEmail({ email, date, code, codeUrl }) {
   const getTime = (date) => {

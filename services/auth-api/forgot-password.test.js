@@ -1,68 +1,69 @@
 import faker from "@faker-js/faker";
 import database, { close } from "../../libs/connection";
-import * as forgotPassword from "./forgot-password";
 import * as email from "../../libs/emails/forgot-password";
+import { Tokens, createEvent } from "../../libs/test-utils";
+import { LambdaTypes, handler } from "./index";
 faker.locale = "pt_BR";
 
 const validEmail = "gugazimmermann@gmail.com";
-let mock;
+const inactiveEmail = "test@test.com.br";
+const forgot = { email: faker.internet.email() };
+let mockEmail;
 
 describe("Auth API - Forgot Password", () => {
   beforeEach(() => { 
-    mock = jest.spyOn(email, 'sendForgotPasswordEmail').mockResolvedValueOnce({ 
+    mockEmail = jest.spyOn(email, 'sendForgotPasswordEmail').mockResolvedValueOnce({ 
       ResponseMetadata: { RequestId: "eda54736" }, MessageId: "0000000"
     });
   });
-  afterEach(() => { mock.mockRestore(); });
-  afterAll(() => { mock.mockRestore(); });
+  afterEach(() => { mockEmail.mockRestore() });
+  afterAll(() => { 
+    close();
+    mockEmail.mockRestore();
+  });
 
-  test("Should fail without email or invalid email", async () => {
-    let event = { body: JSON.stringify({}) };
-    let res = await forgotPassword.handler(event);
-    let body = JSON.parse(res.body);
+  test("Should fail without email", async () => {
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, { ...forgot, email: null }, Tokens.Valid));
+    expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(0);
     expect(res.statusCode).toEqual(400);
-    expect(body.message).toBe("Dados inválidos!");
+    expect(JSON.parse(res.body).message).toBe("Dados inválidos!");
+  });
 
-    event = { body: JSON.stringify({ email: faker.name.firstName() }) };
-    res = await forgotPassword.handler(event);
-    body = JSON.parse(res.body);
+  test("Should fail with invalid email", async () => {
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, { ...forgot, email: 'a' }, Tokens.Valid));
+    expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(0);
     expect(res.statusCode).toEqual(400);
-    expect(body.message).toBe("Dados inválidos!");
+    expect(JSON.parse(res.body).message).toBe("Dados inválidos!");
   });
 
   test("Should fail if user not found", async () => {
-    const event = { body: JSON.stringify({ email: faker.internet.email() }) };
-    const res = await forgotPassword.handler(event);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, forgot, Tokens.Valid));
+    expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(0);
     expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Usuário não encontrado!");
+    expect(JSON.parse(res.body).message).toBe("Usuário não encontrado!");
   });
 
   test("Should fail if user is inactive", async () => {
-    const event = { body: JSON.stringify({ email: "test@test.com.br" }) };
-    const res = await forgotPassword.handler(event);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, { ...forgot, email: inactiveEmail}, Tokens.Valid));
+    expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(0);
     expect(res.statusCode).toEqual(401);
-    expect(body.message).toBe("Cadastro Inativo!");
+    expect(JSON.parse(res.body).message).toBe("Cadastro Inativo!");
   });
 
   test("Should success", async () => {
-    const event = { body: JSON.stringify({ email: validEmail }) };
-    const res = await forgotPassword.handler(event);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, { ...forgot, email: validEmail}, Tokens.Valid));
     expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
-    expect(body.email).toBe(validEmail);
+    expect(JSON.parse(res.body).email).toBe(validEmail);
   });
 
   test("Should return database error", async () => {
     const { Users } = await database();
     const mock = jest.spyOn(Users, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const event = { body: JSON.stringify({ email: validEmail }) };
-    const res = await forgotPassword.handler(event);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.ForgotPassword, forgot, Tokens.Valid));
+    expect(email.sendForgotPasswordEmail).toHaveBeenCalledTimes(0);
     expect(res.statusCode).toEqual(500);
-    expect(body.message).toBe("DB ERROR!");
+    expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();
   });
 });

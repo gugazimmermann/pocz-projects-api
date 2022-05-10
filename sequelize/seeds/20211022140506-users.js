@@ -55,6 +55,46 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: "8febd3ee-e9f3-4a7c-aecf-4cdd043b9fd3",
+          email: "testinvite@test.com",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "8febd3ee-e9f3-4a7c-aecf-4cdd043b9fd3",
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "b5ad793e-798f-4f55-8c7f-e3ac4a89e8b0",
+          email: "testinvite2@test.com",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "b5ad793e-798f-4f55-8c7f-e3ac4a89e8b0",
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "e4fb93dd-8c72-4cb9-bfc6-7d5f72ac1682",
+          email: "testinvite2@test.com",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "b5ad793e-798f-4f55-8c7f-e3ac4a89e8b0",
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "0772b5bd-a385-40bb-99b6-6c41838167cc",
+          email: "testinvite3@test.com",
+          password:
+            "$2a$08$dCn.6v4n1Q2P0JRb5Edr9u9FbkcCQjNpWNHymjlGIeTYpzYo74OQe",
+          tenant: "0772b5bd-a385-40bb-99b6-6c41838167cc",
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

@@ -3,8 +3,7 @@ import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 import config from "../../libs/jwt-config";
 
-export const handler = async (event, context) => {
-  const { refreshToken } = JSON.parse(event?.body);
+export const refreshToken = async ({ refreshToken }) => {
   if (!refreshToken) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { RefreshToken } = await database();

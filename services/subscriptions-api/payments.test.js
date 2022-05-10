@@ -1,34 +1,22 @@
 import database, { close } from "../../libs/connection";
-import { userNotFoundToken, validToken } from "../../libs/test-utils";
-import * as payments from "./payments";
+import { Tokens, createEvent } from "../../libs/test-utils";
+import { LambdaTypes, handler } from "./index";
 
 describe("Subscriptions API - Payments", () => {
   afterAll(() => { close() });
-
-  test("Should fail with user not found", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await userNotFoundToken()).principalId } }}
-    const res = await payments.handler(event);
-    const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Usuário não encontrado!");
-  });
-
-  test("Should pass with valid token and user", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await payments.handler(event);
-    const body = JSON.parse(res.body);
+  
+  test("Should success", async () => {
+    const res = await handler(await createEvent(LambdaTypes.Payments, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(body.data.length).toBe(3);
+    expect(JSON.parse(res.body).data.length).toBe(3);
   });
 
-  test("Should fail if database error", async () => {
+  test("Should return database error", async () => {
     const { Payments } = await database();
     const mock = jest.spyOn(Payments, 'findAll').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await payments.handler(event);
-    const body = JSON.parse(res.body);
+    const res = await handler(await createEvent(LambdaTypes.Payments, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(500);
-    expect(body.message).toBe("DB ERROR!");
+    expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();
   });
 });

@@ -7,7 +7,6 @@
     "collectCoverageFrom": [
       "libs/**/*.js",
       "services/**/*.js",
-      "!services/model/*.js",
       "!services/test-db/*.js"
     ]
   },
@@ -25,7 +24,7 @@
     "deploy:prod": "NODE_ENV=production sls deploy --stage production",
     "remove:prod": "NODE_ENV=production sls remove --stage production",
     "seed:test": "NODE_ENV=test yarn sequelize-cli db:migrate || true && NODE_ENV=test yarn sequelize-cli db:seed:all || true",
-    "test": "yes | yarn reset:db && NODE_ENV=test serverless-bundle test --colors ----collectCoverage"
+    "test": "yes | yarn reset:db && NODE_ENV=test serverless-bundle test --verbose --noStackTrace --runInBand --colors --collectCoverage --detectOpenHandles"
   },
   "dependencies": {
     "@aws-sdk/client-ses": "^3.85.0",

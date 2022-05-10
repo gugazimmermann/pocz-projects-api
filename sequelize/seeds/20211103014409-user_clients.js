@@ -11,6 +11,18 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          personId: "4e8c09c1-8f7b-417c-8ac4-69ed3e3f3feb",
+          userId: "fd6bc51e-195e-4433-b404-8a9fdfa0f632",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          personId: "b5bb4789-e609-4923-918b-2207aa61e8ea",
+          userId: "fd6bc51e-195e-4433-b404-8a9fdfa0f632",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

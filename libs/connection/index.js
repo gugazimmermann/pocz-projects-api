@@ -43,6 +43,7 @@ const databaseConfig = {
     port: 5430,
     dialect: "postgres",
     dialectModule: pg,
+    logging: false
   },
   production: {
     username: process.env.POSTGRES_USER,

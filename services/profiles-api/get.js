@@ -1,12 +1,9 @@
 import CreateResponse from "../../libs/response";
-import DecodedId from "../../libs/decoded-id";
-import { findOne, resultToData } from "./utils";
+import { findOne, resultToData } from "../shared/profiles-utils";
 
-export const handler = async (event, context) => {
+export const get = async ({ id, tenant }) => {
   try {
-    const user = await DecodedId(event);
-    if (user instanceof Error) return CreateResponse( user.statusCode, { message: user.message });
-    const resultData = await findOne(user.id);
+    const resultData = await findOne(id, tenant);
     if (!resultData) return CreateResponse(404, { message: "Registro não encontrado!" });
     return CreateResponse(200, { data: resultToData(resultData) });
   } catch (err) {

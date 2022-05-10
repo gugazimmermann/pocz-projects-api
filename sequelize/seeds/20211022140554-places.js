@@ -39,6 +39,23 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        {
+          id: "d55a5d33-5744-46fa-9aa4-26ea3da9a625",
+          name: "Place Test Delete",
+          email: null,
+          phone: null,
+          zip: "88.303-000",
+          address: "Rua Brusque",
+          number: null,
+          complement: null,
+          neighborhood: "Centro",
+          city: "Itajaí",
+          state: "SC",
+          active: false,
+          tenantId: "fd6bc51e-195e-4433-b404-8a9fdfa0f632",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
       ],
       {}
     );

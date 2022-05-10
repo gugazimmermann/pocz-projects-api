@@ -1,42 +1,31 @@
 import database, { close } from "../../libs/connection";
-import { userNotFoundToken, validToken } from "../../libs/test-utils";
-import * as subscriptions from "./subscriptions";
+import { Tokens, createEvent } from "../../libs/test-utils";
+import { LambdaTypes, handler } from "./index";
 
 describe("Subscriptions API - Subscriptions", () => {
   afterAll(() => { close() });
-
-  test("Should fail with user not found", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await userNotFoundToken()).principalId } }}
-    const res = await subscriptions.handler(event);
-    const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Usuário não encontrado!");
-  });
-
-  test("Should not find a subscription", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await validToken("eb07ecc2-fd14-480a-a9a8-354b1918ef93")).principalId } }}
-    const res = await subscriptions.handler(event);
-    const body = JSON.parse(res.body);
-    expect(res.statusCode).toEqual(404);
-    expect(body.message).toBe("Assinatura não encontrada!");
-  });
-
-  test("Should pass with valid token and user", async () => {
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await subscriptions.handler(event);
-    const body = JSON.parse(res.body);
+  
+  test("Should success", async () => {
+    const res = await handler(await createEvent(LambdaTypes.Subscriptions, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(body.data.id).toBe("458a4fbf-beae-4311-a2f9-81a77aad4adf");
+    expect(JSON.parse(res.body).data.id).toBe("458a4fbf-beae-4311-a2f9-81a77aad4adf");
   });
 
-  test("Should fail if database error", async () => {
+  test("Should fail if subscription not found", async () => {
     const { Subscriptions } = await database();
-    const mock = jest.spyOn(Subscriptions, 'findAll').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const event = { requestContext: { authorizer: { principalId: (await validToken()).principalId } }}
-    const res = await subscriptions.handler(event);
-    const body = JSON.parse(res.body);
+    const mock = jest.spyOn(Subscriptions, 'findOne').mockResolvedValueOnce(null);
+    const res = await handler(await createEvent(LambdaTypes.Subscriptions, {}, Tokens.Valid));
+    expect(res.statusCode).toEqual(404);
+    expect(JSON.parse(res.body).message).toBe("Assinatura não encontrada!");
+    mock.mockRestore();
+  });
+
+  test("Should return database error", async () => {
+    const { Subscriptions } = await database();
+    const mock = jest.spyOn(Subscriptions, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
+    const res = await handler(await createEvent(LambdaTypes.Subscriptions, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(500);
-    expect(body.message).toBe("DB ERROR!");
+    expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();
   });
 });

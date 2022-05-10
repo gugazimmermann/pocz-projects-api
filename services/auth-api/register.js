@@ -4,16 +4,15 @@ import CreateError from "../../libs/error";
 import { validateEmail } from "../../libs/utils";
 import { createUser, createUserPayment } from "./utils";
 
-export const handler = async (event, context) => {
-  const { name, email, password, planId, cardInfo } = JSON.parse(event?.body);
+export const register = async ({ name, email, password, planId, cardInfo }) => {
   if (!name || !email || !validateEmail(email) || !password || !planId) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Sequelize, Plans, Users } = await database();
     await Sequelize.transaction(async () => {
       const userPlan = await Plans.findByPk(planId);
-      if (!userPlan) return CreateError(400, { message: "Dados inválidos!" });
-      const emailExists = await Users.findOne({ where: { email: email } });
-      if (emailExists) throw CreateError(400, "Email já está cadastrado!");
+      if (!userPlan) throw CreateError(400, "Dados inválidos!");
+      const emailExists = await Users.findOne({ where: { email } });
+      if (!!emailExists) throw CreateError(400, "Email já está cadastrado!");
       const { user, subscription } = await createUser({
         name: name,
         email: email,
@@ -50,6 +49,6 @@ export const handler = async (event, context) => {
     });
     return CreateResponse(201, { message: "Usuário cadastrado com sucesso!" });
   } catch (err) {
-    return CreateResponse(err.statusCode || 500, err.message);
+    return CreateResponse(err.statusCode || 500, { message: err.message });
   }
 };

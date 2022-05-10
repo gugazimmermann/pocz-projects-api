@@ -7,11 +7,7 @@ export function usersResultToData(resultData) {
     avatar: resultData?.profile?.avatar || "",
     phone: resultData?.profile?.phone || "",
     email: resultData?.profile?.email || "",
-    role:
-      (resultData?.roles &&
-        resultData.roles.length &&
-        resultData.roles[0].name) ||
-      "",
+    role: (resultData?.roles && resultData.roles.length && resultData.roles[0].name) || "",
     active: resultData?.active || false,
   };
 }
@@ -25,25 +21,16 @@ export function usersResultToListData(resultData) {
   };
 }
 
-export function invitesResultToData(resultData) {
-  return {
-    id: resultData.id,
-    name: resultData.name,
-    email: resultData.email,
-    updatedAt: resultData.updatedAt,
-  };
+export function invitesResultToData({id, name, email, updatedAt}) {
+  return { id, name, email, updatedAt };
 }
 
 export async function findAllInvites(tenantId) {
   const { Invites } = await database();
-  const data = await Invites.findAll({
-    where: { tenantId },
-  });
-  return data;
+  return await Invites.findAll({ where: { tenantId } });
 }
 
 export async function findOneInvite(code, tenantId) {
   const { Invites } = await database();
-  const data = await Invites.findOne({ where: { tenantId, code } });
-  return data;
+  return await Invites.findOne({ where: { tenantId, code } });
 }
