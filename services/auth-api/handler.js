@@ -13,7 +13,6 @@ import {
 
 export const handler = async (event) => {
   const body = JSON.parse(event?.body);
-
   if (body.type === LambdaTypes.Login) return await login(body.object);
   if (body.type === LambdaTypes.ChangePassword) return await changePassword(body.object);
   if (body.type === LambdaTypes.ForgotPasswordCode) return await forgotPasswordCode(body.object);
