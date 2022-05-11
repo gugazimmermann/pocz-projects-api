@@ -15,5 +15,4 @@ export const create = async (tenantId, company) => {
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }
-}
-
+};

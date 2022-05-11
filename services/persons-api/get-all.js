@@ -1,5 +1,4 @@
 import CreateResponse from "../../libs/response";
-import DecodedId from "../../libs/decoded-id";
 import { findAll, resultToData } from "./utils";
 
 export const getAll = async (tenantId, type) => {
