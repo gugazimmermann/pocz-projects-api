@@ -1,13 +1,12 @@
 org: gugapocz
-app: api
-service: api
-
-resources:
-  Description: The main stack for ${env:PROJECT_NAME}
-
+app: pocz-api
+service: pocz-api
 frameworkVersion: '3'
 useDotenv: true
 variablesResolutionMode: 20210326
+
+resources:
+  Description: The main stack for ${env:PROJECT_NAME}
 
 package:
   individually: true
@@ -41,8 +40,9 @@ custom:
 provider:
   name: aws
   runtime: nodejs14.x
-  stage: ${opt:stage, "development"}
   region: us-east-1
+  profile: default
+  stage: ${opt:stage, "development"}
   lambdaHashingVersion: 20201221
   environment:
     NODE_ENV: ${self:provider.stage}
