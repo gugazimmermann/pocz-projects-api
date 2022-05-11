@@ -1,5 +1,3 @@
-org: gugapocz
-app: pocz-api
 service: pocz-api
 frameworkVersion: '3'
 useDotenv: true

@@ -36,10 +36,7 @@ jobs:
       - name: Install NPM dependencies
         run: yarn install
       - name: Deploy Production
-        run: |
-          echo $SERVERLESS_ACCESS_KEY
-          yarn deploy:prod
+        run: yarn deploy:prod
         env:
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SERVERLESS_ACCESS_KEY }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
