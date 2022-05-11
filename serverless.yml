@@ -13,8 +13,6 @@ plugins:
   - serverless-bundle
   - serverless-offline
   - serverless-dotenv-plugin
-  - serverless-domain-manager
-  - serverless-sequelize-migrations
   - serverless-iam-roles-per-function
 
 custom:
@@ -26,14 +24,6 @@ custom:
       - pg-hstore
       - dotenv
       - sequelize
-
-  customDomain:
-    domainName: ${env:PROJECT_API_DOMAIN}
-    basePath: ''
-    stage: ${self:provider.stage}
-    createRoute53Record: true
-    endpointType: 'regional'
-    securityPolicy: tls_1_2
 
 provider:
   name: aws
@@ -47,6 +37,17 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     PROJECT_NAME: ${env:PROJECT_NAME}
     PROJECT_APP_URL: ${env:PROJECT_APP_URL}
+  httpApi:
+    name: ${self:service}-${opt:stage, "development"}
+    metrics: true
+    cors: true
+    payload: "2.0"
+    authorizers:
+      authAuthorizer:
+        type: request
+        functionName: auth-verify
+  logs:
+    httpApi: true
   tracing:
     lambda: true
   iamRoleStatements:
@@ -69,10 +70,9 @@ functions:
   healthCheck:
     handler: services/test-db/handler.healthCheck
     events:
-      - http:
+      - httpApi:
           path: /
           method: get
-          cors: true
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -83,38 +83,29 @@ functions:
   auth:
     handler: services/auth-api/handler.handler
     events:
-      - http:
+      - httpApi:
           path: /auth/register
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/login
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/forgot-password
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/forgot-password-code
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/change-password
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/refresh-token
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /auth/me
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
+            name: authAuthorizer
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -128,34 +119,24 @@ functions:
   subscriptions:
     handler: services/subscriptions-api/handler.handler
     events:
-      - http:
+      - httpApi:
           path: /subscriptions
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /subscriptions/plans
           method: post
-          cors: true
-      - http:
+      - httpApi:
           path: /subscriptions/payments
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /subscriptions/credit-cards
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
+            name: authAuthorizer
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -163,102 +144,51 @@ functions:
   places:
     handler: services/places-api/handler.handler
     events:
-      - http:
+      - httpApi:
           path: /places
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/get/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/create
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/delete/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/update/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/count
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/active/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/managers/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /places/employees/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
+            name: authAuthorizer
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -267,26 +197,16 @@ functions:
   profiles:
     handler: services/profiles-api/handler.handler
     events:
-      - http:
+      - httpApi:
           path: /profiles
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /profiles/create
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
+            name: authAuthorizer
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -294,94 +214,51 @@ functions:
   members:
     handler: services/members-api/handler.handler
     events:
-      - http:
+      - httpApi:
           path: /members
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/list
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/get/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/create
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/invites
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/invites/code/{code}
           method: post
-          request:
-            parameters:
-              querystrings:
-                code: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/invites/create
           method: post
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/invites/send/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
-      - http:
+            name: authAuthorizer
+      - httpApi:
           path: /members/invites/delete/{id}
           method: post
-          request:
-            parameters:
-              querystrings:
-                id: true
-          cors: true
           authorizer:
-            name: auth-verify
-            identitySource: method.request.header.Authorization
-            resultTtlInSeconds: 3600
+            name: authAuthorizer
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
