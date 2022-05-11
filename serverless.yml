@@ -16,6 +16,8 @@ plugins:
   - serverless-iam-roles-per-function
 
 custom:
+  serverless-offline:
+    ignoreJWTSignature: true
   bundle:
     ignorePackages:
       - pg-native
@@ -43,9 +45,12 @@ provider:
     cors: true
     payload: "2.0"
     authorizers:
-      authAuthorizer:
+      authVerify:
+        functionName: authVerify
         type: request
-        functionName: auth-verify
+        resultTtlInSeconds: 300
+        identitySource:
+          - $request.header.Authorization
   logs:
     httpApi: true
   tracing:
@@ -77,7 +82,7 @@ functions:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
 
-  auth-verify:
+  authVerify:
     handler: services/auth-api/verify.handler
 
   auth:
@@ -105,7 +110,8 @@ functions:
           path: /auth/me
           method: post
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -121,22 +127,25 @@ functions:
     events:
       - httpApi:
           path: /subscriptions
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /subscriptions/plans
-          method: post
+          method: get
       - httpApi:
           path: /subscriptions/payments
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /subscriptions/credit-cards
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -146,49 +155,58 @@ functions:
     events:
       - httpApi:
           path: /places
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/get/{id}
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/create
           method: post
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/delete/{id}
-          method: post
+          method: delete
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/update/{id}
-          method: post
+          method: put
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/count
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/active/{id}
-          method: post
+          method: put
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/managers/{id}
-          method: post
+          method: put
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /places/employees/{id}
-          method: post
+          method: put
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -199,14 +217,16 @@ functions:
     events:
       - httpApi:
           path: /profiles
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
-          path: /profiles/create
-          method: post
+          path: /profiles/update
+          method: put
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
@@ -216,49 +236,138 @@ functions:
     events:
       - httpApi:
           path: /members
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/list
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/get/{id}
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/create
           method: post
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/invites
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/invites/code/{code}
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/invites/create
           method: post
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/invites/send/{id}
-          method: post
+          method: get
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
       - httpApi:
           path: /members/invites/delete/{id}
+          method: delete
+          authorizer:
+            name: authVerify
+            type: request
+    layers:
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - 'ses:SendEmail'
+          - 'ses:SendRawEmail'
+        Resource: '*'
+
+  persons:
+    handler: services/persons-api/handler.handler
+    events:
+      - httpApi:
+          path: /persons
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /persons/get/{id}
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /persons/create
           method: post
           authorizer:
-            name: authAuthorizer
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /persons/delete
+          method: delete
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /persons/change-owner
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+    layers:
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - 'ses:SendEmail'
+          - 'ses:SendRawEmail'
+        Resource: '*'
+
+  companies:
+    handler: services/companies-api/handler.handler
+    events:
+      - httpApi:
+          path: /companies
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /companies/{id}
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /companies
+          method: post
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /companies/{id}
+          method: delete
+          authorizer:
+            name: authVerify
+            type: request
     layers:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer

@@ -1,9 +1,9 @@
 export const LambdaTypes = {
-  ChangeOwner: 'ChangeOwner',
-  Create: 'Create',
-  Delete: 'Delete',
-  GetAll: 'GetAll',
-  GetOne: 'GetOne'
+  ChangeOwner: '/persons/change-owner',
+  Create: '/persons/create',
+  Delete: '/persons/delete',
+  GetAll: '/persons',
+  GetOne: '/persons/get'
 };
 export { handler } from './handler';
 export { changeOwner } from './change-owner';

@@ -1,13 +1,13 @@
 export const LambdaTypes = {
-  Create: 'Create',
-  GetAll: 'GetAll',
-  GetList: 'GetList',
-  GetOne: 'GetOne',
-  InvitesCode: 'InvitesCode',
-  InvitesCreate: 'InvitesCreate',
-  InvitesDelete: 'InvitesDelete',
-  InvitesSend: 'InvitesSend',
-  Invites: 'Invites'
+  Create: '/members/create',
+  GetAll: '/members',
+  GetList: '/members/list',
+  GetOne: '/members/get',
+  InvitesCode: '/members/invites/code',
+  InvitesCreate: '/members/invites/create',
+  InvitesDelete: '/members/invites/delete',
+  InvitesSend: '/members/invites/send',
+  Invites: '/members/invites'
 };
 export { handler } from './handler';
 export { create } from './create';

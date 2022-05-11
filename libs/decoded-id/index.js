@@ -2,7 +2,7 @@ import database from '../connection';
 import CreateError from '../error';
 
 async function DecodedId(event) {
-  const principalId = event?.requestContext?.authorizer?.principalId || null;
+  const principalId = event?.requestContext?.authorizer?.jwt?.claims?.id || null;
   if (!principalId) return CreateError(400, 'Autorização não encontrada!');
   try {
     const { Users } = await database();

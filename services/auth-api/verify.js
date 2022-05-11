@@ -11,9 +11,10 @@ function generateAuthResponse(principalId, effect, methodArn) {
 }
 
 export const handler = async (event) => {
-  const { authorizationToken, methodArn } = event;
-  if (!authorizationToken || !methodArn) return generateAuthResponse(undefined, "Deny", methodArn);
-  const token = authorizationToken.replace("Bearer ", "");
+  const { methodArn } = event;
+  const { Authorization } = event.headers;
+  if (!Authorization || !methodArn) return generateAuthResponse(undefined, "Deny", methodArn);
+  const token = Authorization.replace("Bearer ", "");
   if (!token) return generateAuthResponse(undefined, "Deny", methodArn);
   try {
     const decoded = jwt.verify(token, config.jwtSecret);
