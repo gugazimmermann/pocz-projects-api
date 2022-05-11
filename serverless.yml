@@ -84,6 +84,9 @@ functions:
 
   authVerify:
     handler: services/auth-api/verify.handler
+    layers:
+      - !Ref PgLambdaLayer
+      - !Ref DotenvPgSequelizeLambdaLayer
 
   auth:
     handler: services/auth-api/handler.handler
