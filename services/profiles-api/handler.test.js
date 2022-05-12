@@ -1,5 +1,5 @@
 import { Tokens, createEvent } from "../../libs/test-utils";
-import { handler } from "./index";
+import { LambdaTypes, handler } from "./index";
 
 describe("Profiles API - Handler", () => {
 
@@ -16,19 +16,19 @@ describe("Profiles API - Handler", () => {
   });
 
   test("Should fail without authorizer", async () => {
-    const res = await handler(await createEvent(null, {}));
+    const res = await handler(await createEvent(LambdaTypes.Get, {}));
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res.body).message).toBe("Autorização não encontrada!");
   });
 
   test("Should fail with user not found", async () => {
-    const res = await handler(await createEvent(null, {}, Tokens.NotFound));
+    const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.NotFound));
     expect(res.statusCode).toEqual(404);
     expect(JSON.parse(res.body).message).toBe("Usuário não encontrado!");
   });
 
   test("Should fail with expired token", async () => {
-    const res = await handler(await createEvent(null, {}, Tokens.Expired));
+    const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.Expired));
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res.body).message).toBe("Autorização não encontrada!");
   });

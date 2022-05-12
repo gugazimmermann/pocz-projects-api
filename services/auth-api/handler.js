@@ -11,10 +11,9 @@ import {
   register
 } from './index';
 
-export const handler = async (event) => {
-  console.log(event?.body);
+export const handler = async (event, context) => {
   const { path } = event.requestContext?.http;
-  const body = JSON.parse(event?.body);
+  const body = event.body ? JSON.parse(event?.body) : null;
   if (path === LambdaTypes.Login) return await login(body);
   if (path === LambdaTypes.ChangePassword) return await changePassword(body);
   if (path === LambdaTypes.ForgotPasswordCode) return await forgotPasswordCode(body);

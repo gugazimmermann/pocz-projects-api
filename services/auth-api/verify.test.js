@@ -22,7 +22,7 @@ describe("Auth API - Verify", () => {
 
   test("Should pass with valid JWT", async () => {
     const validToken = jwt.sign({ id: userId }, config.jwtSecret, { expiresIn: config.jwtExpiration });
-    const res = await verify.handler({ authorizationToken: `Bearer ${validToken}`, methodArn: "b41b1045-f2a0-40b6-8be2-7381e392b94a" } );
+    const res = await verify.handler({ headers: { Authorization: `Bearer ${validToken}`}, methodArn: "b41b1045-f2a0-40b6-8be2-7381e392b94a" } );
     expect(res).toStrictEqual({ principalId: userId, policyDocument: allow });
   });
 });

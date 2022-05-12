@@ -7,12 +7,13 @@ function generatePolicyDocument(effect, methodArn) {
 }
 
 function generateAuthResponse(principalId, effect, methodArn) {
+  console.debug(JSON.stringify({ principalId, policyDocument: generatePolicyDocument(effect, methodArn) }, undefined, 2));
   return { principalId, policyDocument: generatePolicyDocument(effect, methodArn) };
 }
 
 export const handler = async (event) => {
-  const { methodArn } = event;
-  const { Authorization } = event.headers;
+  const methodArn = event.methodArn || event.routeArn;
+  const Authorization = event.headers?.Authorization || event.headers?.authorization;
   if (!Authorization || !methodArn) return generateAuthResponse(undefined, "Deny", methodArn);
   const token = Authorization.replace("Bearer ", "");
   if (!token) return generateAuthResponse(undefined, "Deny", methodArn);
