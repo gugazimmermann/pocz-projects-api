@@ -28,10 +28,10 @@ describe("Auth API - Me", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Me, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    const body = JSON.parse(res.body);
-    expect(body.userId).toBe(validUser.userId);
-    expect(body.email).toBe(validUser.email);
-    expect(body.active).toBe(validUser.active);
+    const {data} = JSON.parse(res.body);
+    expect(data.userId).toBe(validUser.userId);
+    expect(data.email).toBe(validUser.email);
+    expect(data.active).toBe(validUser.active);
   });
 
   test("Should fail with database error", async () => {

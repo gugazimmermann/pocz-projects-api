@@ -6,10 +6,10 @@ export const Tokens = { NotFound: 'NotFound', Expired: 'Expired', Valid: 'Valid'
 
 export const createEvent = async (type, object, token, parameters, userID) => {
   const event = { body: JSON.stringify(object) };
+  event.routeKey = type;
   if (token === Tokens.NotFound) event.requestContext = { authorizer: { principalId: (await notFoundToken()).principalId } };
   if (token === Tokens.Expired) event.requestContext = { authorizer: { principalId: (await expiredToken()).principalId } };
   if (token === Tokens.Valid) event.requestContext = { authorizer: { principalId: (await validToken(userID)).principalId } };
-  event.requestContext = { ...event.requestContext, http: { path: type } };
   if (parameters) event.pathParameters = parameters
   return event;
 };

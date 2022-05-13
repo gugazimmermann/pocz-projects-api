@@ -14,18 +14,17 @@ import {
 } from './index';
 
 export const handler = async (event) => {
-  const { path } = event.requestContext?.http;
-  const body = JSON.parse(event?.body);
+  const body = event.body ? JSON.parse(event.body) : null;
   const user = await DecodedId(event);
   if (user instanceof Error) return CreateResponse( user.statusCode, { message: user.message });
-  if (path === LambdaTypes.Create) return await create(user.tenant, body);
-  if (path === LambdaTypes.GetAll) return await getAll(user.tenant, user.id);
-  if (path === LambdaTypes.GetList) return await getList(user.tenant, user.id);
-  if (path === LambdaTypes.GetOne) return await getOne(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.InvitesCode) return await invitesCode(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.InvitesCreate) return await invitesCreate(user.tenant, user.id, body);
-  if (path === LambdaTypes.InvitesDelete) return await invitesDelete(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.InvitesSend) return await invitesSend(user.tenant, user.id, event?.pathParameters);
-  if (path === LambdaTypes.Invites) return await invites(user.tenant);
+  if (event.routeKey === LambdaTypes.Create) return await create(user.tenant, body);
+  if (event.routeKey === LambdaTypes.GetAll) return await getAll(user.tenant, user.id);
+  if (event.routeKey === LambdaTypes.GetList) return await getList(user.tenant, user.id);
+  if (event.routeKey === LambdaTypes.GetOne) return await getOne(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.InvitesCode) return await invitesCode(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.InvitesCreate) return await invitesCreate(user.tenant, user.id, body);
+  if (event.routeKey === LambdaTypes.InvitesDelete) return await invitesDelete(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.InvitesSend) return await invitesSend(user.tenant, user.id, event.pathParameters);
+  if (event.routeKey === LambdaTypes.Invites) return await invites(user.tenant);
   return CreateResponse(500, { message: 'No Event Type!' });
 };

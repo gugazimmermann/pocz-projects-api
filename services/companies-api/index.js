@@ -1,8 +1,8 @@
 export const LambdaTypes = {
-  Create: '/companies/create',
-  Delete: '/companies/delete',
-  GetAll: '/companies',
-  GetOne: '/companies/get'
+  Create: 'POST /companies',
+  Delete: 'DELETE /companies/{id}',
+  GetAll: 'GET /companies',
+  GetOne: 'GET /companies/{id}'
 };
 export { handler } from './handler';
 export { create } from './create';

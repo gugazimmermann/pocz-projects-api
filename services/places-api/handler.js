@@ -14,18 +14,17 @@ import {
 } from './index';
 
 export const handler = async (event) => {
-  const { path } = event.requestContext?.http;
-  const body = JSON.parse(event?.body);
+  const body = event.body ? JSON.parse(event.body) : null;
   const user = await DecodedId(event);
   if (user instanceof Error) return CreateResponse( user.statusCode, { message: user.message });
-  if (path === LambdaTypes.Active) return await active(user.tenant, event?.pathParameters, body);
-  if (path === LambdaTypes.Count) return await count(user.tenant);
-  if (path === LambdaTypes.Create) return await create(user.tenant, body);
-  if (path === LambdaTypes.Delete) return await deleteOne(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.Employees) return await employees(user.tenant, event?.pathParameters, body);
-  if (path === LambdaTypes.GetAll) return await getAll(user.tenant);
-  if (path === LambdaTypes.GetOne) return await getOne(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.Managers) return await managers(user.tenant, event?.pathParameters, body);
-  if (path === LambdaTypes.Update) return await update(user.tenant, event?.pathParameters, body);
+  if (event.routeKey === LambdaTypes.Active) return await active(user.tenant, event.pathParameters, body);
+  if (event.routeKey === LambdaTypes.Count) return await count(user.tenant);
+  if (event.routeKey === LambdaTypes.Create) return await create(user.tenant, body);
+  if (event.routeKey === LambdaTypes.Delete) return await deleteOne(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.Employees) return await employees(user.tenant, event.pathParameters, body);
+  if (event.routeKey === LambdaTypes.GetAll) return await getAll(user.tenant);
+  if (event.routeKey === LambdaTypes.GetOne) return await getOne(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.Managers) return await managers(user.tenant, event.pathParameters, body);
+  if (event.routeKey === LambdaTypes.Update) return await update(user.tenant, event.pathParameters, body);
   return CreateResponse(500, { message: 'No Event Type!' });
 };

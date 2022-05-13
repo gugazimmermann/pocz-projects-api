@@ -1,11 +1,11 @@
 export const LambdaTypes = {
-  Login: '/auth/login',
-  ChangePassword: '/auth/change-password',
-  ForgotPasswordCode: '/auth/forgot-password-code',
-  ForgotPassword: '/auth/forgot-password',
-  Me: '/auth/me',
-  RefreshToken: '/auth/refresh-token',
-  Register: '/auth/register'
+  Login: 'POST /auth/login',
+  ChangePassword: 'POST /auth/change-password',
+  ForgotPasswordCode: 'POST /auth/forgot-password-code',
+  ForgotPassword: 'POST /auth/forgot-password',
+  Me: 'GET /auth/me',
+  RefreshToken: 'POST /auth/refresh-token',
+  Register: 'POST /auth/register'
 };
 export { handler } from './handler';
 export { login } from './login';

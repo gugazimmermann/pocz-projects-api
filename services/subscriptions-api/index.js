@@ -1,8 +1,8 @@
 export const LambdaTypes = {
-  CreditCards: '/subscriptions/credit-cards',
-  Payments: '/subscriptions/payments',
-  Plans: '/subscriptions/plans',
-  Subscriptions: '/subscriptions'
+  CreditCards: 'GET /subscriptions/credit-cards',
+  Payments: 'GET /subscriptions/payments',
+  Plans: 'GET /subscriptions/plans',
+  Subscriptions: 'GET /subscriptions'
 };
 export { handler } from './handler';
 export { creditCards } from './credit-cards';

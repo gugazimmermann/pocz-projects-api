@@ -1,13 +1,13 @@
 export const LambdaTypes = {
-  Active: '/places/active',
-  Count: '/places/count',
-  Create: '/places/create',
-  Delete: '/places/delete',
-  Employees: '/places/employees',
-  GetAll: '/places',
-  GetOne: '/places/get',
-  Managers: '/places/managers',
-  Update: '/places/update'
+  GetAll: 'GET /places',
+  GetOne: 'GET /places/{id}',
+  Count: 'GET /places/count',
+  Create: 'POST /places',
+  Update: 'PUT /places/{id}',
+  Active: 'PUT /places/active/{id}',
+  Employees: 'PUT /places/employees/{id}',
+  Managers: 'PUT /places/managers/{id}',
+  Delete: 'DELETE /places/{id}'
 };
 export { handler } from './handler';
 export { active } from './active';

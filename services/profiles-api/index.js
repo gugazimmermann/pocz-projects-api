@@ -1,6 +1,6 @@
 export const LambdaTypes = {
-  Get: '/profiles',
-  Update: '/profiles/update'
+  Get: 'GET /profiles',
+  Update: 'PUT /profiles'
 };
 export { handler } from './handler';
 export { get } from './get';

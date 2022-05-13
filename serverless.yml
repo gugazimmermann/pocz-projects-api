@@ -163,26 +163,8 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /places/get/{id}
+          path: /places/{id}
           method: get
-          authorizer:
-            name: authVerify
-            type: request
-      - httpApi:
-          path: /places/create
-          method: post
-          authorizer:
-            name: authVerify
-            type: request
-      - httpApi:
-          path: /places/delete/{id}
-          method: delete
-          authorizer:
-            name: authVerify
-            type: request
-      - httpApi:
-          path: /places/update/{id}
-          method: put
           authorizer:
             name: authVerify
             type: request
@@ -193,7 +175,25 @@ functions:
             name: authVerify
             type: request
       - httpApi:
+          path: /places
+          method: post
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /places/{id}
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
           path: /places/active/{id}
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /places/employees/{id}
           method: put
           authorizer:
             name: authVerify
@@ -205,8 +205,8 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /places/employees/{id}
-          method: put
+          path: /places/{id}
+          method: delete
           authorizer:
             name: authVerify
             type: request
@@ -225,7 +225,7 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /profiles/update
+          path: /profiles
           method: put
           authorizer:
             name: authVerify
@@ -250,13 +250,13 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/get/{id}
+          path: /members/{id}
           method: get
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/create
+          path: /members
           method: post
           authorizer:
             name: authVerify
@@ -268,25 +268,25 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/code/{code}
+          path: /members/invites/{code}
           method: get
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/create
+          path: /members/invites
           method: post
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/send/{id}
+          path: /members/invites/{id}
           method: get
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/delete/{id}
+          path: /members/invites/{id}
           method: delete
           authorizer:
             name: authVerify
@@ -305,31 +305,31 @@ functions:
     handler: services/persons-api/handler.handler
     events:
       - httpApi:
+          path: /persons/{type}
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /persons/{id}
+          method: get
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
           path: /persons
-          method: get
-          authorizer:
-            name: authVerify
-            type: request
-      - httpApi:
-          path: /persons/get/{id}
-          method: get
-          authorizer:
-            name: authVerify
-            type: request
-      - httpApi:
-          path: /persons/create
           method: post
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /persons/delete
+          path: /persons/{id}
           method: delete
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /persons/change-owner
+          path: /persons
           method: put
           authorizer:
             name: authVerify

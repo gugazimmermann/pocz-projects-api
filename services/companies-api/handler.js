@@ -3,13 +3,12 @@ import DecodedId from "../../libs/decoded-id";
 import { LambdaTypes, create, deleteOne, getAll, getOne } from './index';
 
 export const handler = async (event) => {
-  const { path } = event.requestContext?.http;
-  const body = JSON.parse(event?.body);
+  const body = event.body ? JSON.parse(event.body) : null;
   const user = await DecodedId(event);
   if (user instanceof Error) return CreateResponse( user.statusCode, { message: user.message });
-  if (path === LambdaTypes.Create) return await create(user.tenant, body);
-  if (path === LambdaTypes.Delete) return await deleteOne(user.tenant, event?.pathParameters);
-  if (path === LambdaTypes.GetAll) return await getAll(user.tenant);
-  if (path === LambdaTypes.GetOne) return await getOne(user.tenant, event?.pathParameters);
+  if (event.routeKey === LambdaTypes.Create) return await create(user.tenant, body);
+  if (event.routeKey === LambdaTypes.Delete) return await deleteOne(user.tenant, event.pathParameters);
+  if (event.routeKey === LambdaTypes.GetAll) return await getAll(user.tenant);
+  if (event.routeKey === LambdaTypes.GetOne) return await getOne(user.tenant, event.pathParameters);
   return CreateResponse(500, { message: 'No Event Type!' });
 };
