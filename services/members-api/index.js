@@ -3,7 +3,7 @@ export const LambdaTypes = {
   GetAll: 'GET /members',
   GetList: 'GET /members/list',
   GetOne: 'GET /members/{id}',
-  InvitesCode: 'GET /members/invites/{code}',
+  InvitesCode: 'GET /members/invites/code/{code}',
   InvitesCreate: 'POST /members/invites',
   InvitesDelete: 'DELETE /members/invites/{id}',
   InvitesSend: 'GET /members/invites/{id}',

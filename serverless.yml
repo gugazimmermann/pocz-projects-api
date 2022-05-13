@@ -268,7 +268,7 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/{code}
+          path: /members/invites/code/{code}
           method: get
           authorizer:
             name: authVerify
@@ -305,7 +305,7 @@ functions:
     handler: services/persons-api/handler.handler
     events:
       - httpApi:
-          path: /persons/{type}
+          path: /persons/type/{type}
           method: get
           authorizer:
             name: authVerify

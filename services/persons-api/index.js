@@ -2,7 +2,7 @@ export const LambdaTypes = {
   ChangeOwner: 'PUT /persons',
   Create: 'POST /persons',
   Delete: 'DELETE /persons/{id}',
-  GetAll: 'GET /persons/{type}',
+  GetAll: 'GET /persons/type/{type}',
   GetOne: 'GET /persons/{id}'
 };
 export { handler } from './handler';
