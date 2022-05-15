@@ -8,19 +8,19 @@ describe("Persons API - Get One", () => {
   afterAll(() => { close() });
 
   test("Should fail without ID", async () => {
-    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid));
+    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, {}));
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res.body).message).toBe("Dados inválidos!");
   });
 
   test("Should fail with invalid ID", async () => {
-    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, '63444ba7-8c94-4a1e-b371-3bb07d9b15d0'));
+    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, {id: '63444ba7-8c94-4a1e-b371-3bb07d9b15d0'}));
     expect(res.statusCode).toEqual(404);
     expect(JSON.parse(res.body).message).toBe("Registro não encontrado!");
   });
 
   test("Should success", async () => {
-    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, personID));
+    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, {id: personID}));
     expect(res.statusCode).toEqual(200);
     expect(JSON.parse(res.body).data.type).toBe("Contatos");
   });
@@ -28,7 +28,7 @@ describe("Persons API - Get One", () => {
   test("Should return database error", async () => {
     const { Persons } = await database();
     const mock = jest.spyOn(Persons, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, personID));
+    const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, {id: personID}));
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();

@@ -1,7 +1,7 @@
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const invitesDelete = async (tenantId, id) => {
+export const invitesDelete = async (tenantId, {id}) => {
   if (!id) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const { Invites } = await database();

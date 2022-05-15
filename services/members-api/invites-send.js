@@ -3,7 +3,7 @@ import CreateResponse from "../../libs/response";
 import { sendInviteEmail } from "../../libs/emails/invite";
 import { findOne } from "../shared/profiles-utils";
 
-export const invitesSend = async (tenantId, userId, id) => {
+export const invitesSend = async (tenantId, userId, {id}) => {
   if (!id) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const userData = await findOne(userId, tenantId);

@@ -1,7 +1,7 @@
 import CreateResponse from "../../libs/response";
 import { findOne, resultToData } from "./utils";
 
-export const active = async (tenantId, id, { active }) => {
+export const active = async (tenantId, { id }, { active }) => {
   if (!id || typeof active !== "boolean") return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const resultData = await findOne(id, tenantId);

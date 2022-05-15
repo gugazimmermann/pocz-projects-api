@@ -1,7 +1,7 @@
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const creditCards = async ({ id: userId }) => {
+export const creditCards = async (userId) => {
   try {
     const { CreditCards } = await database();
     const data = await CreditCards.findAll({ where: { userId } });

@@ -9,25 +9,25 @@ describe("Members API - Get One", () => {
   afterAll(() => { close() });
 
   test("Should fail without id", async () => {
-    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid));
+    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, {}));
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res.body).message).toBe("Dados inválidos!");
   });
 
   test("Should fail with invalid id", async () => {
-    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, '32e95deb-f8e8-4ad8-997a-84950b57b098'));
+    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, {id: '32e95deb-f8e8-4ad8-997a-84950b57b098'}));
     expect(res.statusCode).toEqual(404);
     expect(JSON.parse(res.body).message).toBe("Registro não encontrado!");
   });
 
   test("Should fail with different tentant id ", async () => {
-    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, inviteID));
+    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, {id: inviteID}));
     expect(res.statusCode).toEqual(401);
     expect(JSON.parse(res.body).message).toBe("Sem permissão!");
   });
 
   test("Should success", async () => {
-    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, inviteID, userID));
+    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, {id: inviteID}, userID));
     expect(res.statusCode).toEqual(200);
     expect(JSON.parse(res.body).message).toBe("Registro excluido com sucesso!");
   });
@@ -35,7 +35,7 @@ describe("Members API - Get One", () => {
   test("Should return database error", async () => {
     const { Invites } = await database();
     const mock = jest.spyOn(Invites, 'findByPk').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, inviteID, userID));
+    const res = await handler(await createEvent(LambdaTypes.InvitesDelete, {}, Tokens.Valid, {id: inviteID}, userID));
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();

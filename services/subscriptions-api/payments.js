@@ -1,7 +1,7 @@
 import database from "../../libs/connection";
 import CreateResponse from "../../libs/response";
 
-export const payments = async ({ id: userId }) => {
+export const payments = async (userId) => {
   try {
     const { Payments } = await database();
     const data = await Payments.findAll({ where: { userId }, order: [["paidDate", "DESC"]] });

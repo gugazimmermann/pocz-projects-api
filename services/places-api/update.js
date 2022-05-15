@@ -2,7 +2,7 @@ import CreateResponse from "../../libs/response";
 import { validateEmail } from "../../libs/utils";
 import { findOne, resultToData } from "./utils";
 
-export const update = async (tenantId, id, place) => {
+export const update = async (tenantId, { id }, place) => {
   if (!id || !place.name || !place.zip || !place.address || !place.city || !place.state) return CreateResponse(400, { message: "Dados inválidos!" });
   if (place.email && !validateEmail(place.email)) return CreateResponse(400, { message: "Dados inválidos!" });
   try {

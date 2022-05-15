@@ -8,19 +8,19 @@ describe("Places API - Delete", () => {
   afterAll(() => { close() });
 
   test("Should fail without ID", async () => {
-    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid));
+    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, {}));
     expect(res.statusCode).toEqual(400);
     expect(JSON.parse(res.body).message).toBe("Dados inválidos!");
   });
 
   test("Should fail with invalid ID", async () => {
-    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, '6c7984c0-c4d4-441b-a25c-2d6d49cf24a0'));
+    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, { id: '6c7984c0-c4d4-441b-a25c-2d6d49cf24a0' }));
     expect(res.statusCode).toEqual(404);
     expect(JSON.parse(res.body).message).toBe("Registro não encontrado!");
   });
 
   test("Should success", async () => {
-    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, placeID));
+    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, { id: placeID }));
     expect(res.statusCode).toEqual(200);
     expect(JSON.parse(res.body).message).toBe("Registro excluido com sucesso!");
   });
@@ -28,7 +28,7 @@ describe("Places API - Delete", () => {
   test("Should return database error", async () => {
     const { Places } = await database();
     const mock = jest.spyOn(Places, 'findOne').mockRejectedValueOnce(new Error("DB ERROR!"));
-    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, placeID));
+    const res = await handler(await createEvent(LambdaTypes.Delete, {}, Tokens.Valid, { id: placeID }));
     expect(res.statusCode).toEqual(500);
     expect(JSON.parse(res.body).message).toBe("DB ERROR!");
     mock.mockRestore();

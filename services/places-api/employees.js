@@ -1,7 +1,7 @@
 import CreateResponse from "../../libs/response";
 import { findOne, resultToData } from "./utils";
 
-export const employees = async (tenantId, id, body) => {
+export const employees = async (tenantId, { id }, body) => {
   if (!id || !body) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const place = await findOne(id, tenantId);
