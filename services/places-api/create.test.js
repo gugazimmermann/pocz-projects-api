@@ -56,7 +56,7 @@ describe("Places API - Create", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Create, place, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe(place.name);
+    expect(JSON.parse(res.body).body.name).toBe(place.name);
   });
 
   test("Should return database error", async () => {

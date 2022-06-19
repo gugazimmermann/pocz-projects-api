@@ -35,7 +35,7 @@ describe("Persons API - Create", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Create, person, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe(person.name);
+    expect(JSON.parse(res.body).body.name).toBe(person.name);
   });
 
   test("Should return database error", async () => {

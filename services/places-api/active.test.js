@@ -34,8 +34,8 @@ describe("Places API - Active", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Active, {active: true}, Tokens.Valid, { id: placeId }));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe(placeId);
-    expect(JSON.parse(res.body).data.active).toBe(true);
+    expect(JSON.parse(res.body).body.id).toBe(placeId);
+    expect(JSON.parse(res.body).body.active).toBe(true);
   });
 
   test("Should return database error", async () => {

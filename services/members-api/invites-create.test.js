@@ -77,7 +77,7 @@ describe("Members API - Create", () => {
     const res = await handler(await createEvent(LambdaTypes.InvitesCreate, invite, Tokens.Valid, null, '0772b5bd-a385-40bb-99b6-6c41838167cc'));
     expect(email.sendInviteEmail).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe(invite.name);
+    expect(JSON.parse(res.body).body.name).toBe(invite.name);
   });
   
   test("Should success with profissional plan", async () => {
@@ -85,7 +85,7 @@ describe("Members API - Create", () => {
     expect(mockEmail).toHaveBeenCalledTimes(1);
     expect(email.sendInviteEmail).toHaveBeenCalledTimes(1);
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe(invite.name);
+    expect(JSON.parse(res.body).body.name).toBe(invite.name);
   });
 
   test("Should return database error", async () => {

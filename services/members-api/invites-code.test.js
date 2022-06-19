@@ -22,7 +22,7 @@ describe("Members API - Invites Code", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.InvitesCode, {}, Tokens.Valid, code));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe("2c8d0893-642f-4c45-89fd-49ab9e15f72a");
+    expect(JSON.parse(res.body).body.id).toBe("2c8d0893-642f-4c45-89fd-49ab9e15f72a");
   });
 
   test("Should return database error", async () => {

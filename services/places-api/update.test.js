@@ -69,8 +69,8 @@ describe("Places API - Update", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Update, place, Tokens.Valid, { id: placeId }));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe("JR Advocacia");
-    expect(JSON.parse(res.body).data.address).toBe(place.address);
+    expect(JSON.parse(res.body).body.name).toBe("JR Advocacia");
+    expect(JSON.parse(res.body).body.address).toBe(place.address);
   });
 
   test("Should return database error", async () => {

@@ -69,7 +69,7 @@ describe("Profiles API - Update", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Update, data, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.address).toBe(data.address);
+    expect(JSON.parse(res.body).body.address).toBe(data.address);
   });
 
   test("Should fail profile not found", async () => {

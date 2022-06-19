@@ -28,19 +28,19 @@ describe("Persons API - Change Owner", () => {
   test("Should success with person client", async () => {
     const res = await handler(await createEvent(LambdaTypes.ChangeOwner, personClient, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe(personClient.id);
+    expect(JSON.parse(res.body).body.id).toBe(personClient.id);
   });
 
   test("Should success with person contact", async () => {
     const res = await handler(await createEvent(LambdaTypes.ChangeOwner, personContact, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe(personContact.id);
+    expect(JSON.parse(res.body).body.id).toBe(personContact.id);
   });
 
   test("Should success with person suplier", async () => {
     const res = await handler(await createEvent(LambdaTypes.ChangeOwner, personSuplier, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe(personSuplier.id);
+    expect(JSON.parse(res.body).body.id).toBe(personSuplier.id);
   });
 
   test("Should return database error", async () => {

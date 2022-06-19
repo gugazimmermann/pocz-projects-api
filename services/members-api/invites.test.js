@@ -8,7 +8,7 @@ describe("Members API - Invites Code", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Invites, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBeGreaterThanOrEqual(1);
+    expect(JSON.parse(res.body).body.length).toBeGreaterThanOrEqual(1);
   });
 
   test("Should return database error", async () => {

@@ -35,7 +35,7 @@ describe("Companies API - Create", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Create, company, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.name).toBe(company.name);
+    expect(JSON.parse(res.body).body.name).toBe(company.name);
   });
 
   test("Should return database error", async () => {

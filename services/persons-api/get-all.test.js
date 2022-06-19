@@ -16,19 +16,19 @@ describe("Persons API - Get All", () => {
   test(`Should success with type ${types[0]}`, async () => {
     const res = await handler(await createEvent(LambdaTypes.GetAll, {}, Tokens.Valid, {type: types[0]}));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBeGreaterThanOrEqual(1);
+    expect(JSON.parse(res.body).body.length).toBeGreaterThanOrEqual(1);
   });
 
   test(`Should success with type ${types[1]}`, async () => {
     const res = await handler(await createEvent(LambdaTypes.GetAll, {}, Tokens.Valid, {type: types[1]}));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBeGreaterThanOrEqual(1);
+    expect(JSON.parse(res.body).body.length).toBeGreaterThanOrEqual(1);
   });
 
   test(`Should success with type ${types[2]}`, async () => {
     const res = await handler(await createEvent(LambdaTypes.GetAll, {}, Tokens.Valid, {type: types[2]}));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBeGreaterThanOrEqual(1);
+    expect(JSON.parse(res.body).body.length).toBeGreaterThanOrEqual(1);
   });
 
   test("Should return database error", async () => {

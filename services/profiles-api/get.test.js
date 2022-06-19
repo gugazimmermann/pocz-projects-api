@@ -11,7 +11,7 @@ describe("Profiles API - Get", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Get, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe(validId);
+    expect(JSON.parse(res.body).body.id).toBe(validId);
   });
 
   test("Should fail user not found", async () => {

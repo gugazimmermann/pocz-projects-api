@@ -8,7 +8,7 @@ describe("Subscriptions API - Plans", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Plans, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBe(7);
+    expect(JSON.parse(res.body).body.length).toBe(7);
   });
 
   test("Should return database error", async () => {

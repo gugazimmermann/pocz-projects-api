@@ -8,7 +8,7 @@ describe("Subscriptions API - Credit Cards", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.CreditCards, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.length).toBe(1);
+    expect(JSON.parse(res.body).body.length).toBe(1);
   });
 
   test("Should return database error", async () => {

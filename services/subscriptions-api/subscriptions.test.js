@@ -8,7 +8,7 @@ describe("Subscriptions API - Subscriptions", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Subscriptions, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.id).toBe("458a4fbf-beae-4311-a2f9-81a77aad4adf");
+    expect(JSON.parse(res.body).body.id).toBe("458a4fbf-beae-4311-a2f9-81a77aad4adf");
   });
 
   test("Should fail if subscription not found", async () => {
