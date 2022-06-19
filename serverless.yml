@@ -193,13 +193,31 @@ functions:
             name: authVerify
             type: request
       - httpApi:
+          path: /places/managers/{id}
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
           path: /places/employees/{id}
           method: put
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /places/managers/{id}
+          path: /places/clients/{id}
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /places/supliers/{id}
+          method: put
+          authorizer:
+            name: authVerify
+            type: request
+      - httpApi:
+          path: /places/contacts/{id}
           method: put
           authorizer:
             name: authVerify
@@ -214,18 +232,17 @@ functions:
       - !Ref PgLambdaLayer
       - !Ref DotenvPgSequelizeLambdaLayer
 
-  # TODO: Lambda to handle the avatar image
   profiles:
     handler: services/profiles-api/handler.handler
     events:
       - httpApi:
-          path: /profiles
+          path: /profile
           method: get
           authorizer:
             name: authVerify
             type: request
       - httpApi:
-          path: /profiles
+          path: /profile
           method: put
           authorizer:
             name: authVerify
