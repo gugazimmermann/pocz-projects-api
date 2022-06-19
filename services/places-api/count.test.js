@@ -8,7 +8,7 @@ describe("Places API - Active", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.Count, {}, Tokens.Valid));
     expect(res.statusCode).toEqual(200);
-    expect(typeof JSON.parse(res.body).data).toBe("number");
+    expect(typeof JSON.parse(res.body).body).toBe("number");
   });
 
   test("Should return database error", async () => {
