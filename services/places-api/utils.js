@@ -57,5 +57,5 @@ export async function findAll(tenantId) {
 export async function findOne(id, tenantId) {
   const { Places, Profiles } = await database();
   const include = placesInclude(Profiles);
-  return await Places.findOne({ where: { id, tenantId }, attributes: ["id", "name", "city", "state", "active"], include });
+  return await Places.findOne({ where: { id, tenantId }, include });
 }

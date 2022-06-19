@@ -7,7 +7,7 @@ module.exports = {
       [
         {
           id: "b5bb4789-e609-4923-918b-2207aa61e8ea",
-          type: "Contatos",
+          type: "contacts",
           avatar: null,
           name: "Contact Test 1",
           email: "teste@teste.com",
@@ -28,7 +28,7 @@ module.exports = {
         },
         {
           id: "a134551a-528f-4154-a916-5d0749377fee",
-          type: "Contatos",
+          type: "contacts",
           avatar: null,
           name: "Contact Test 2",
           email: "teste@teste.com",
@@ -49,7 +49,7 @@ module.exports = {
         },
         {
           id: "57b7c8f7-4bc7-42b7-9124-f38ce1402033",
-          type: "Contatos",
+          type: "contacts",
           avatar: null,
           name: "Contact Test 3",
           email: "teste@teste.com",
@@ -70,7 +70,7 @@ module.exports = {
         },
         {
           id: "70183427-d5e4-4a1e-97ba-ee434403bb80",
-          type: "Contatos",
+          type: "contacts",
           avatar: null,
           name: "Contact Test 4",
           email: "teste@teste.com",
@@ -91,7 +91,7 @@ module.exports = {
         },
         {
           id: "c2d40490-e098-404b-9e90-f333f9d14121",
-          type: "Clientes",
+          type: "clients",
           avatar: null,
           name: "Client Test 1",
           email: "teste@teste.com",
@@ -112,7 +112,7 @@ module.exports = {
         },
         {
           id: "d3e2320d-2da8-44ff-8cc7-65be5a2a5d63",
-          type: "Clientes",
+          type: "clients",
           avatar: null,
           name: "Client Test 2",
           email: "teste@teste.com",
@@ -133,7 +133,7 @@ module.exports = {
         },
         {
           id: "e59e2b6b-a6c6-48db-8620-d97acd49b6c0",
-          type: "Clientes",
+          type: "clients",
           avatar: null,
           name: "Client Test 3",
           email: "teste@teste.com",
@@ -154,7 +154,7 @@ module.exports = {
         },
         {
           id: "4e8c09c1-8f7b-417c-8ac4-69ed3e3f3feb",
-          type: "Fornecedores",
+          type: "supliers",
           avatar: null,
           name: "Supplier Test 1",
           email: "teste@teste.com",
@@ -175,7 +175,7 @@ module.exports = {
         },
         {
           id: "03d0a69f-4000-4519-99d8-c564cf40acaf",
-          type: "Fornecedores",
+          type: "supliers",
           avatar: null,
           name: "Supplier Test 2",
           email: "teste@teste.com",
@@ -196,7 +196,7 @@ module.exports = {
         },
         {
           id: "6c832536-c713-4fe0-92a0-84693f4a2392",
-          type: "Fornecedores",
+          type: "supliers",
           avatar: null,
           name: "Supplier Test 3",
           email: "teste@teste.com",

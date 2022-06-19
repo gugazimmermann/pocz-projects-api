@@ -2,15 +2,15 @@ import database from "../../libs/connection";
 
 export function resultToData(resultData) {
   const onwers = [];
-  if (resultData.type === "Clientes") {
+  if (resultData.type === "clients") {
     if (resultData.userClients) resultData.userClients.forEach((u) => onwers.push({ id: u.id, name: u?.profile?.name, type: "person" }));
     if (resultData.placeClients) resultData.placeClients.forEach((p) => onwers.push({ id: p.id, name: p.name, type: "place" }));
   }
-  if (resultData.type === "Contatos") {
+  if (resultData.type === "contacts") {
     if (resultData.userContacts) resultData.userContacts.forEach((u) => onwers.push({ id: u.id, name: u?.profile?.name, type: "person" }));
     if (resultData.placeContacts) resultData.placeContacts.forEach((p) => onwers.push({ id: p.id, name: p.name, type: "place" }));
   }
-  if (resultData.type === "Fornecedores") {
+  if (resultData.type === "supliers") {
     if (resultData.userSupliers) resultData.userSupliers.forEach((u) => onwers.push({ id: u.id, name: u?.profile?.name, type: "person" }));
     if (resultData.placeSupliers) resultData.placeSupliers.forEach((p) => onwers.push({ id: p.id, name: p.name, type: "place" }));
   }

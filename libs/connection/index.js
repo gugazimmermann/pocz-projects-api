@@ -96,19 +96,19 @@ db.Places.belongsToMany(db.Users, { as: "managersPlace", through: { model: "plac
 db.Users.belongsToMany(db.Places, { as: "placeEmployees", through: { model: "place_employees" }});
 db.Places.belongsToMany(db.Users, { as: "employeesPlace", through: { model: "place_employees" }});
 
-db.Persons.belongsToMany(db.Users, { as: "userClients", through: { model: "user_clients" }});
-db.Users.belongsToMany(db.Persons, { as: "clientsUser", through: { model: "user_clients" }});
-db.Persons.belongsToMany(db.Users, { as: "userSupliers", through: { model: "user_supliers" }});
-db.Users.belongsToMany(db.Persons, { as: "supliersUser", through: { model: "user_supliers" }});
-db.Persons.belongsToMany(db.Users, { as: "userContacts", through: { model: "user_contacts" }});
-db.Users.belongsToMany(db.Persons, { as: "contactsUser", through: { model: "user_contacts" }});
-
 db.Persons.belongsToMany(db.Places, { as: "placeClients", through: { model: "place_clients" }});
 db.Places.belongsToMany(db.Persons, { as: "clientsPlace", through: { model: "place_clients" }});
 db.Persons.belongsToMany(db.Places, { as: "placeSupliers", through: { model: "place_supliers" }});
 db.Places.belongsToMany(db.Persons, { as: "supliersPlace", through: { model: "place_supliers" }});
 db.Persons.belongsToMany(db.Places, { as: "placeContacts", through: { model: "place_contacts" }});
 db.Places.belongsToMany(db.Persons, { as: "contactsPlace", through: { model: "place_contacts" }});
+
+db.Persons.belongsToMany(db.Users, { as: "userClients", through: { model: "user_clients" }});
+db.Users.belongsToMany(db.Persons, { as: "clientsUser", through: { model: "user_clients" }});
+db.Persons.belongsToMany(db.Users, { as: "userSupliers", through: { model: "user_supliers" }});
+db.Users.belongsToMany(db.Persons, { as: "supliersUser", through: { model: "user_supliers" }});
+db.Persons.belongsToMany(db.Users, { as: "userContacts", through: { model: "user_contacts" }});
+db.Users.belongsToMany(db.Persons, { as: "contactsUser", through: { model: "user_contacts" }});
 
 db.Persons.belongsTo(db.Companies);
 db.Persons.hasMany(db.Attachments);

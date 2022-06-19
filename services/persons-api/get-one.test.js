@@ -22,7 +22,7 @@ describe("Persons API - Get One", () => {
   test("Should success", async () => {
     const res = await handler(await createEvent(LambdaTypes.GetOne, {}, Tokens.Valid, {id: personID}));
     expect(res.statusCode).toEqual(200);
-    expect(JSON.parse(res.body).data.type).toBe("Contatos");
+    expect(JSON.parse(res.body).data.type).toBe("contacts");
   });
 
   test("Should return database error", async () => {

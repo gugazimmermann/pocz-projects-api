@@ -6,7 +6,7 @@ faker.locale = "pt_BR";
 
 const person = { 
   name: faker.name.firstName(), 
-  type: 'Contatos', 
+  type: 'contacts', 
   email: faker.internet.email(), 
   phone: ""
 };

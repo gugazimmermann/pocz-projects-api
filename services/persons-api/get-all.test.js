@@ -2,7 +2,7 @@ import database, { close } from "../../libs/connection";
 import { Tokens, createEvent } from "../../libs/test-utils";
 import { LambdaTypes, handler } from "./index";
 
-const types = ["Clientes","Contatos","Fornecedores"]
+const types = ["clients","contacts","supliers"]
 
 describe("Persons API - Get All", () => {
   afterAll(() => { close() });
