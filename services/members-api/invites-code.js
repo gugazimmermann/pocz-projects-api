@@ -6,7 +6,7 @@ export const invitesCode = async (tenantId, code) => {
   try {
     const resultData = await findOneInvite(code, tenantId);
     if (!resultData) return CreateResponse(404, { message: "Registro não encontrado!" });
-    return CreateResponse(200, { data: { ...invitesResultToData(resultData), code: resultData.code } });
+    return CreateResponse(200, { body: { ...invitesResultToData(resultData), code: resultData.code } });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

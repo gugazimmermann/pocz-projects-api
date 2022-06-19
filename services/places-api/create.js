@@ -10,7 +10,7 @@ export const create = async (tenantId, place) => {
     const { Places } = await database();
     const newPlace = await Places.create({...place, active: true, tenantId });
     const resultData = await findOne(newPlace.id, tenantId);
-    return CreateResponse(200, { data: resultToData(resultData) });
+    return CreateResponse(200, { body: resultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

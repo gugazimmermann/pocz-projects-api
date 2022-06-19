@@ -22,7 +22,7 @@ export const invitesCreate = async (tenantId, userId, { name, email }) => {
     const member = { name, email, code: Math.random().toString().substring(2, 8), userId: userData.id, tenantId: userData.tenant };
     const resultData = await Invites.create(member);
     await sendInviteEmail({ ...member, user: userData.profile.name });
-    return CreateResponse(200, { data: invitesResultToData(resultData) });
+    return CreateResponse(200, { body: invitesResultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

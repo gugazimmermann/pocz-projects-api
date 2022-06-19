@@ -9,7 +9,7 @@ export const update = async (tenantId, { id }, place) => {
     const resultData = await findOne(id, tenantId);
     if (!resultData) return CreateResponse(404, { message: "Registro não encontrado!" });
     await resultData.update(place);
-    return CreateResponse(200, { data: resultToData(resultData) });
+    return CreateResponse(200, { body: resultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

@@ -7,7 +7,7 @@ export const getOne = async (tenantId, {id}) => {
   try {
     const resultData = await findOne(id, tenantId);
     if (!resultData) return CreateResponse(404, { message: "Registro não encontrado!" });
-    return CreateResponse(200, { data: usersResultToData(resultData) });
+    return CreateResponse(200, { body: usersResultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

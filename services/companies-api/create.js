@@ -11,7 +11,7 @@ export const create = async (tenantId, company) => {
     for (const key in company) if (company[key] === "") company[key] = null;
     const newCompany = await Companies.create({ ...company, tenantId });
     const resultData = await findOne(newCompany.id, tenantId);
-    return CreateResponse(200, { data: resultToData(resultData) });
+    return CreateResponse(200, { body: resultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }

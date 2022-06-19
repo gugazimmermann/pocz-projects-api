@@ -8,7 +8,7 @@ export const active = async (tenantId, { id }, { active }) => {
     if (!resultData) return CreateResponse(404, { message: "Registro não encontrado!" });
     resultData.active = active;
     await resultData.save();
-    return CreateResponse(200, { data: resultToData(resultData) });
+    return CreateResponse(200, { body: resultToData(resultData) });
   } catch (err) {
     return CreateResponse(err.statusCode || 500, { message: err.message });
   }
