@@ -7,7 +7,6 @@ function generatePolicyDocument(effect, methodArn) {
 }
 
 function generateAuthResponse(principalId, effect, methodArn) {
-  console.debug(JSON.stringify({ principalId, policyDocument: generatePolicyDocument(effect, methodArn) }, undefined, 2));
   return { principalId, policyDocument: generatePolicyDocument(effect, methodArn) };
 }
 
