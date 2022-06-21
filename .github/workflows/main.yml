@@ -21,6 +21,7 @@ jobs:
           echo PROJECT_WEBSITE_URL=${{ secrets.PROJECT_WEBSITE_URL }} >> .env.production
           echo PROJECT_APP_URL=${{ secrets.PROJECT_APP_URL }} >> .env.production
           echo PROJECT_API_URL=${{ secrets.PROJECT_API_URL }} >> .env.production
+          echo PROJECT_AVATAR_BUCKET=${{ secrets.PROJECT_AVATAR_BUCKET }} >> .env.production
           echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env.production
           echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env.production
           echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env.production
