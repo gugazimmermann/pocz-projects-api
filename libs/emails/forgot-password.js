@@ -26,7 +26,7 @@ export async function sendForgotPasswordEmail({ email, date, code, codeUrl }) {
     return await sesClient.send(new SendEmailCommand({
       Destination: { ToAddresses: [email] },
       Message: { Body: { Html: { Data: message } }, Subject: { Data: subject } },
-      Source: "no-reply@iustitia.io",
+      Source: process.env.AWS_SES_EMAIL,
     }));
   } catch (err) {
     return CreateResponse(500, { message: err.message });
