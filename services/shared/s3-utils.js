@@ -27,7 +27,7 @@ export async function sendToBucket(fileName, file) {
       Body: file
     }));
   } catch (error) {
-    console.log("DeleteObjectCommand Error", error);
+    console.log("PutObjectCommand Error", error);
     return null;
   }
 }
