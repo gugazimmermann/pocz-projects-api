@@ -61,6 +61,10 @@ provider:
         - xray:PutTraceSegments
         - xray:PutTelemetryRecords
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::${env:PROJECT_AVATAR_BUCKET}/*"
 
 layers:
   pg:
