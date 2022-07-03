@@ -27,10 +27,12 @@ jobs:
           echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env.production
           echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env.production
           echo JWT_SECRET=${{ secrets.JWT_SECRET }} >> .env.production
+          echo AWS_SES_EMAIL=${{ secrets.AWS_SES_EMAIL }} >> .env.production
+          echo REGION=${{ secrets.REGION }} >> .env.production
           cat .env.production
           cp .env.production ./.env.development
       - name: Install Serverless Framework
-        run: npm install -g serverless
+        run: npm install --location=global serverless
       - name: Serverless Authentication
         run: sls config credentials --provider aws --key ${{secrets.AWS_ACCESS_KEY_ID}} --secret ${{secrets.AWS_SECRET_ACCESS_KEY}}
       - name: Install NPM dependencies

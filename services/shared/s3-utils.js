@@ -5,13 +5,7 @@ export async function deleteFromBucket(fileName) {
     Bucket: process.env.PROJECT_AVATAR_BUCKET,
     Key: fileName
   };
-  const client = new S3Client({
-    region: "us-east-1",
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env. AWS_SECRET_ACCESS_KEY
-    }
-  });
+  const client = new S3Client({ region: process.env.REGION });
   try {
     await client.send(new HeadObjectCommand(commandInput));
   } catch (error) {
@@ -26,13 +20,7 @@ export async function deleteFromBucket(fileName) {
 
 export async function sendToBucket(fileName, file) {
   try {
-    const client = new S3Client({
-      region: "us-east-1",
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env. AWS_SECRET_ACCESS_KEY
-      }
-    });
+    const client = new S3Client({ region: process.env.REGION });
     return await client.send(new PutObjectCommand({
       Bucket: process.env.PROJECT_AVATAR_BUCKET,
       Key: fileName,
