@@ -18,7 +18,7 @@ export const update = async (userId, tenantId, { name, email, address, number, c
       const resizedAvatar = await resizeAvatar(files[0].content);
       if (resizedAvatar) {
         const response = await sendToBucket(avatarPath, resizedAvatar);
-        if (response['$metadata']?.httpStatusCode === 200) {
+        if (response && response['$metadata']?.httpStatusCode === 200) {
           await deleteFromBucket(resultData.avatar);
           await resultData.update({ avatar: avatarPath });
         }
