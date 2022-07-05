@@ -1,7 +1,7 @@
 import CreateResponse from "../../libs/response";
 import { findOneInvite, invitesResultToData } from "./utils";
 
-export const invitesCode = async (tenantId, code) => {
+export const invitesCode = async ({ tenantId, code }) => {
   if (!code) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const resultData = await findOneInvite(code, tenantId);

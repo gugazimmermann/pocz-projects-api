@@ -284,9 +284,6 @@ functions:
       - httpApi:
           path: /members
           method: post
-          authorizer:
-            name: authVerify
-            type: request
       - httpApi:
           path: /members/invites
           method: get
@@ -294,11 +291,8 @@ functions:
             name: authVerify
             type: request
       - httpApi:
-          path: /members/invites/code/{code}
+          path: /members/invites/code/{tenantId}/{code}
           method: get
-          authorizer:
-            name: authVerify
-            type: request
       - httpApi:
           path: /members/invites
           method: post
