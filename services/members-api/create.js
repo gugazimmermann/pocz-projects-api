@@ -4,7 +4,7 @@ import { createUser } from "../auth-api/utils";
 import { findOneInvite } from "./utils";
 
 export const create = async ({tenantId, code, password}) => {
-  if (!tenantId, !code || !password) return CreateResponse(400, { message: "Dados inválidos!" });
+  if (!tenantId || !code || !password) return CreateResponse(400, { message: "Dados inválidos!" });
   try {
     const invite = await findOneInvite(code, tenantId);
     if (!invite) return CreateResponse(404, { message: "Registro não encontrado!" });
