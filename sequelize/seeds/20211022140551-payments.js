@@ -7,6 +7,7 @@ module.exports = {
       [
         {
           id: "617877c8-43c7-4ae5-b4d0-e977ee3b2f56",
+          currency: "brl",
           transactionAmount: 99.9,
           status: "Paid",
           paidDate: "2021-10-09 06:10:54",
@@ -18,6 +19,7 @@ module.exports = {
         },
         {
           id: "5c699501-b08f-458d-b127-f7aaac0ef745",
+          currency: "brl",
           transactionAmount: 99.9,
           status: "Paid",
           paidDate: "2021-09-09 06:10:54",
@@ -29,6 +31,7 @@ module.exports = {
         },
         {
           id: "3452da1c-6538-4b7c-a18a-b3c0e99cb978",
+          currency: "brl",
           transactionAmount: 99.9,
           status: "Paid",
           paidDate: "2021-08-09 06:10:54",

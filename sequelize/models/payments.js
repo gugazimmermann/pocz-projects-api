@@ -8,6 +8,7 @@ export default (sequelize, DataTypes) => {
   }
   Payments.init(
     {
+      currency: DataTypes.TEXT,
       transactionAmount: DataTypes.DOUBLE,
       status: DataTypes.TEXT,
       paidDate: DataTypes.DATE,

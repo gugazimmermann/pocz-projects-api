@@ -14,6 +14,7 @@ module.exports = {
           unique: true,
           primaryKey: true,
         },
+        currency: { type: DataTypes.TEXT, allowNull: false },
         transactionAmount: { type: DataTypes.DOUBLE, allowNull: false },
         status: { type: DataTypes.TEXT, allowNull: false },
         paidDate: { type: DataTypes.DATE, allowNull: false },

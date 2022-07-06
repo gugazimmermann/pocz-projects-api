@@ -41,6 +41,7 @@ export async function createUserPayment({ userId, cardInfo, transactionAmount, s
     userId: userId,
   });
   await Payments.create({
+    currency: 'brl',
     transactionAmount: transactionAmount,
     status: "Paid",
     paidDate: new Date(),
